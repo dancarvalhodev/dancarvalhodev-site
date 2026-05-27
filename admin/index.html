@@ -1,148 +1,722 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>bydan — painel admin</title><link rel="icon" type="image/x-icon" href="favicon.ico"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet"><style>:root{--bg:#f0edf5;--bg2:#e8e4f0;--paper:#faf8fc;--text:#2e2a3a;--muted:#7a7290;--dim:#b0aac0;--lilac:#9b8fbd;--lavender:#c4b8e0;--rose:#d4b8c8;--blue:#8aaabb;--green:#8ab8a8;--amber:#c8a870;--red:#c87870;--cream:#f5f0e8;--hand:'Caveat',cursive;--vt:'VT323',monospace;--mono:'Space Mono',monospace;}body.dark{--bg:#13111a;--bg2:#1c1928;--paper:#181520;--text:#e0dcea;--muted:#8a8099;--dim:#4a4460;--lilac:#b8a8d8;--lavender:#6a5f8a;--rose:#8a6878;--blue:#5a7888;--green:#5a8878;--amber:#a88050;--red:#a85858;}*{box-sizing:border-box;margin:0;padding:0;}html,body{height:100%;font-family:var(--mono);font-size:12px;background:var(--bg);color:var(--text);overflow-x:hidden;}a{color:var(--lilac);}button{cursor:pointer;}/* ── LOGIN ── */#login-screen{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;}.login-box{border:1.5px solid var(--lavender);background:var(--paper);padding:40px 48px;box-shadow:4px 4px 0 var(--lavender);max-width:380px;width:100%;text-align:center;}.login-title{font-family:var(--hand);font-size:2.8rem;font-weight:700;color:var(--text);display:block;margin-bottom:4px;}.login-sub{font-family:var(--vt);font-size:0.9rem;color:var(--dim);letter-spacing:0.2em;display:block;margin-bottom:32px;}.login-label{font-family:var(--vt);font-size:0.85rem;color:var(--dim);letter-spacing:0.15em;display:block;text-align:left;margin-bottom:4px;}.login-input{width:100%;padding:8px 12px;margin-bottom:16px;background:var(--bg2);border:1px solid var(--lavender);color:var(--text);font-family:var(--mono);font-size:0.85rem;outline:none;transition:border-color 0.2s;}.login-input:focus{border-color:var(--lilac);}.login-btn{width:100%;padding:10px;background:var(--bg2);border:1px solid var(--lavender);color:var(--lilac);font-family:var(--vt);font-size:1.1rem;letter-spacing:0.15em;transition:background 0.2s,color 0.2s;box-shadow:2px 2px 0 var(--lavender);}.login-btn:hover{background:var(--lavender);color:var(--paper);}.login-err{font-family:var(--vt);font-size:0.85rem;color:var(--red);letter-spacing:0.1em;margin-top:12px;display:none;}.login-attempts{font-family:var(--vt);font-size:0.75rem;color:var(--dim);margin-top:8px;}/* ── ADMIN LAYOUT ── */#admin-app{display:none;height:100vh;flex-direction:column;}#admin-app.visible{display:flex;}/* TOPBAR */#topbar{background:var(--paper);border-bottom:1.5px solid var(--lavender);padding:0 24px;display:flex;align-items:center;gap:0;height:44px;flex-shrink:0;position:sticky;top:0;z-index:100;}.tb-logo{font-family:var(--hand);font-size:1.6rem;font-weight:700;color:var(--text);margin-right:24px;white-space:nowrap;}.tb-logo span{font-family:var(--vt);font-size:0.8rem;color:var(--rose);letter-spacing:0.1em;margin-left:6px;}.tb-nav{display:flex;gap:0;flex:1;}.tb-btn{font-family:var(--vt);font-size:0.9rem;color:var(--muted);background:none;border:none;border-right:1px solid var(--lavender);padding:0 16px;height:44px;letter-spacing:0.1em;transition:background 0.2s,color 0.2s;white-space:nowrap;}.tb-btn:hover,.tb-btn.on{background:var(--bg2);color:var(--text);}.tb-right{display:flex;gap:8px;margin-left:auto;align-items:center;}.publish-btn{font-family:var(--vt);font-size:1rem;color:var(--paper);background:var(--lilac);border:1px solid var(--lavender);padding:4px 18px;letter-spacing:0.15em;transition:background 0.2s;box-shadow:2px 2px 0 var(--dim);}.publish-btn:hover{background:var(--text);}.logout-btn{font-family:var(--vt);font-size:0.85rem;color:var(--dim);background:none;border:1px solid var(--lavender);padding:4px 12px;}.logout-btn:hover{color:var(--red);}.dark-toggle{font-family:var(--vt);font-size:0.85rem;color:var(--dim);background:none;border:1px solid var(--lavender);padding:4px 10px;}/* MAIN AREA */#admin-main{flex:1;overflow:hidden;display:flex;min-width:0;}.admin-panel{display:none;flex:1;overflow:auto;overflow-x:hidden;padding:28px;max-width:100%;box-sizing:border-box;}.admin-panel.on{display:block;}/* PANEL HEADER */.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:1.5px solid var(--lavender);}.panel-title{font-family:var(--hand);font-size:2rem;font-weight:700;color:var(--text);}.panel-sub{font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.15em;margin-top:2px;}/* BUTTONS */.btn{font-family:var(--vt);font-size:0.9rem;color:var(--muted);background:var(--paper);border:1px solid var(--lavender);padding:6px 14px;letter-spacing:0.1em;transition:background 0.2s,color 0.2s;box-shadow:1px 1px 0 var(--lavender);}.btn:hover{background:var(--bg2);color:var(--text);}.btn-primary{color:var(--lilac);border-color:var(--lilac);}.btn-primary:hover{background:var(--lilac);color:var(--paper);}.btn-danger{color:var(--red);border-color:var(--red);}.btn-danger:hover{background:var(--red);color:var(--paper);}.btn-success{color:var(--green);border-color:var(--green);}.btn-success:hover{background:var(--green);color:var(--paper);}.btn-sm{font-size:0.78rem;padding:3px 10px;}/* FORMS */.form-group{margin-bottom:20px;}.form-label{font-family:var(--vt);font-size:0.85rem;color:var(--dim);letter-spacing:0.12em;display:block;margin-bottom:6px;}.form-label span{color:var(--red);margin-left:2px;}.form-input,.form-select,.form-textarea{width:100%;padding:8px 12px;background:var(--bg2);border:1px solid var(--lavender);color:var(--text);font-family:var(--mono);font-size:0.82rem;outline:none;transition:border-color 0.2s;}.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--lilac);}.form-textarea{resize:vertical;min-height:120px;line-height:1.8;}.form-hint{font-family:var(--vt);font-size:0.72rem;color:var(--dim);margin-top:4px;letter-spacing:0.08em;}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}/* RICH EDITOR TOOLBAR */.editor-toolbar{display:flex;flex-wrap:wrap;gap:2px;padding:8px;background:var(--bg);border:1px solid var(--lavender);border-bottom:none;}.ed-btn{font-family:var(--mono);font-size:0.78rem;color:var(--muted);background:var(--paper);border:1px solid var(--lavender);padding:3px 8px;transition:background 0.15s;}.ed-btn:hover{background:var(--bg2);color:var(--lilac);}.ed-sep{width:1px;background:var(--lavender);margin:2px 4px;}.editor-area{width:100%;min-height:320px;padding:16px;background:var(--paper);border:1px solid var(--lavender);color:var(--text);font-family:var(--mono);font-size:0.82rem;line-height:1.9;outline:none;}.editor-area:focus{border-color:var(--lilac);}.editor-preview{border:1px solid var(--lavender);background:var(--paper);padding:20px;font-size:0.82rem;color:var(--muted);line-height:2;min-height:200px;}.editor-tabs{display:flex;gap:0;margin-bottom:0;}.editor-tab{font-family:var(--vt);font-size:0.85rem;color:var(--dim);background:var(--bg2);border:1px solid var(--lavender);border-bottom:none;padding:4px 14px;letter-spacing:0.1em;}.editor-tab.on{background:var(--paper);color:var(--lilac);}/* LISTS */.item-list{border:1px solid var(--lavender);background:var(--paper);}.item-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px dashed var(--lavender);transition:background 0.15s;}.item-row:last-child{border-bottom:none;}.item-row:hover{background:var(--bg2);}.item-title{font-family:var(--hand);font-size:1.3rem;color:var(--text);flex:1;}.item-date{font-family:var(--vt);font-size:0.78rem;color:var(--dim);letter-spacing:0.1em;white-space:nowrap;}.item-status{font-family:var(--vt);font-size:0.75rem;padding:2px 8px;border:1px solid;letter-spacing:0.08em;}.status-published{color:var(--green);border-color:var(--green);}.status-draft{color:var(--amber);border-color:var(--amber);}.item-actions{display:flex;gap:6px;flex-shrink:0;}.empty-state{padding:40px;text-align:center;font-family:var(--vt);font-size:0.9rem;color:var(--dim);letter-spacing:0.15em;}/* TAGS INPUT */.tags-input-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;background:var(--bg2);border:1px solid var(--lavender);min-height:42px;align-items:center;}.tag-chip{font-family:var(--vt);font-size:0.78rem;color:var(--lilac);background:var(--paper);border:1px solid var(--lavender);padding:2px 8px;display:flex;align-items:center;gap:4px;}.tag-chip-del{background:none;border:none;color:var(--dim);font-size:0.85rem;padding:0 2px;cursor:pointer;}.tag-chip-del:hover{color:var(--red);}.tags-new-input{background:none;border:none;color:var(--text);font-family:var(--mono);font-size:0.82rem;outline:none;min-width:80px;flex:1;}/* FILE UPLOAD */.upload-zone{border:2px dashed var(--lavender);background:var(--bg2);padding:24px;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;}.upload-zone:hover,.upload-zone.drag{border-color:var(--lilac);background:var(--paper);}.upload-zone-text{font-family:var(--vt);font-size:0.85rem;color:var(--dim);letter-spacing:0.1em;}.upload-zone input[type=file]{display:none;}.attachment-list{margin-top:12px;display:flex;flex-direction:column;gap:6px;}.attachment-item{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--lavender);padding:8px 12px;}.attachment-name{font-family:var(--vt);font-size:0.78rem;color:var(--muted);flex:1;letter-spacing:0.05em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.attachment-type{font-family:var(--vt);font-size:0.7rem;color:var(--dim);background:var(--bg2);border:1px solid var(--lavender);padding:1px 6px;}.attachment-size{font-family:var(--vt);font-size:0.7rem;color:var(--dim);}.attachment-del{background:none;border:none;color:var(--dim);cursor:pointer;padding:2px 6px;font-size:1rem;}.attachment-del:hover{color:var(--red);}/* IMAGE PREVIEW */.img-preview{max-width:200px;max-height:120px;object-fit:cover;border:1px solid var(--lavender);margin-top:8px;display:block;}/* SITE EDITOR */.site-section-head{font-family:var(--vt);font-size:1rem;color:var(--lilac);letter-spacing:0.15em;padding:10px 0;margin:20px 0 12px;border-bottom:1px solid var(--lavender);}.section-card{border:1px solid var(--lavender);background:var(--paper);padding:20px;margin-bottom:16px;box-shadow:1px 1px 0 var(--dim);}.section-card-title{font-family:var(--vt);font-size:0.85rem;color:var(--dim);letter-spacing:0.12em;margin-bottom:16px;}/* STACK EDITOR */.stack-row-edit{display:flex;align-items:center;gap:8px;margin-bottom:8px;}.stack-row-edit input[type=text]{flex:1;}.stack-row-edit input[type=range]{width:80px;}.stack-row-edit span{font-family:var(--vt);font-size:0.8rem;color:var(--dim);width:32px;text-align:right;}/* TOAST */#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:var(--paper);font-family:var(--vt);font-size:0.9rem;letter-spacing:0.1em;padding:10px 24px;border:1px solid var(--lavender);transition:transform 0.3s;z-index:9999;pointer-events:none;}#toast.show{transform:translateX(-50%) translateY(0);}#toast.err{background:var(--red);}/* PUBLISH MODAL */#publish-modal{position:fixed;inset:0;background:rgba(20,18,28,0.7);z-index:500;display:none;align-items:center;justify-content:center;}#publish-modal.open{display:flex;}.modal-box{background:var(--paper);border:1.5px solid var(--lavender);padding:32px;max-width:480px;width:100%;box-shadow:4px 4px 0 var(--lavender);}.modal-title{font-family:var(--hand);font-size:1.8rem;color:var(--text);margin-bottom:12px;}.modal-body{font-family:var(--vt);font-size:0.85rem;color:var(--dim);letter-spacing:0.08em;line-height:2;margin-bottom:20px;}.modal-actions{display:flex;gap:10px;justify-content:flex-end;}.export-area{width:100%;min-height:160px;padding:12px;background:var(--bg);border:1px solid var(--lavender);color:var(--muted);font-family:var(--mono);font-size:0.72rem;resize:none;margin-top:12px;}/* STATS */.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}.stat-card{border:1px solid var(--lavender);background:var(--paper);padding:16px;box-shadow:1px 1px 0 var(--dim);text-align:center;}.stat-num{font-family:var(--hand);font-size:2.4rem;color:var(--lilac);display:block;}.stat-label{font-family:var(--vt);font-size:0.75rem;color:var(--dim);letter-spacing:0.12em;}.activity-feed{border:1px solid var(--lavender);background:var(--paper);}.activity-item{padding:10px 16px;border-bottom:1px dashed var(--lavender);display:flex;gap:12px;align-items:baseline;}.activity-item:last-child{border-bottom:none;}.activity-time{font-family:var(--vt);font-size:0.75rem;color:var(--dim);letter-spacing:0.08em;white-space:nowrap;}.activity-text{font-family:var(--vt);font-size:0.82rem;color:var(--muted);letter-spacing:0.05em;}/* RESPONSIVE */@media(max-width:800px){
-  .stats-grid{grid-template-columns:1fr 1fr;}
-  .form-row,.form-row-3{grid-template-columns:1fr;}
-}
-@media(max-width:640px){
-  #topbar{padding:0 8px;height:auto;flex-wrap:wrap;padding:6px 8px;gap:4px;}
-  .tb-logo{font-size:1.3rem;margin-right:8px;}
-  .tb-nav{flex-wrap:wrap;gap:0;order:3;width:100%;border-top:1px solid var(--lavender);margin-top:4px;}
-  .tb-btn{padding:6px 10px;font-size:0.75rem;height:auto;border-right:1px solid var(--lavender);}
-  .tb-right{margin-left:auto;}
-  .publish-btn{padding:4px 10px;font-size:0.85rem;}
-  .logout-btn,.dark-toggle{font-size:0.78rem;padding:4px 8px;}
-  #admin-main{overflow-x:hidden;}
-  .admin-panel{padding:16px;overflow-x:hidden;}
-  .panel-head{flex-wrap:wrap;gap:10px;}
-  .panel-title{font-size:1.5rem;}
-  .stats-grid{grid-template-columns:1fr 1fr;gap:8px;}
-  .stat-num{font-size:1.9rem;}
-  .item-row{flex-wrap:wrap;gap:6px;padding:10px 12px;}
-  .item-title{width:100%;}
-  .item-actions{width:100%;justify-content:flex-start;}
-  .form-row,.form-row-3{grid-template-columns:1fr;}
-  .editor-toolbar{gap:1px;padding:6px;}
-  .ed-btn{font-size:0.72rem;padding:3px 5px;}
-  .editor-area{min-height:200px;font-size:0.78rem;}
-  .modal-box{padding:20px 16px;margin:16px;}
-  .section-card{padding:14px;}
-  .stack-row-edit{flex-wrap:wrap;}
-  .stack-row-edit input[type=range]{width:60px;}
-  #toast{width:90%;text-align:center;}
-  .login-box{padding:28px 20px;}
-  .login-title{font-size:2.2rem;}
-}
-@media(max-width:400px){
-  .tb-btn{font-size:0.68rem;padding:5px 7px;}
-  .admin-panel{padding:12px;}
-}</style></head><body><div id="login-screen"><div class="login-box"><span class="login-title">bydan</span><span class="login-sub">// acesso restrito</span><label class="login-label">senha de administrador</label><input class="login-input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"><button class="login-btn" onclick="doLogin()">[ entrar ]</button><div class="login-err" id="login-err">senha incorreta. tente novamente.</div><div class="login-attempts" id="login-attempts"></div><div style="margin-top:20px;"><a href="../index.html" style="font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.1em;text-decoration:none;">[ ← voltar ao site ]</a></div></div></div><div id="admin-app"><div id="topbar"><div class="tb-logo">bydan <span>ADMIN</span></div><div class="tb-nav"><button class="tb-btn on" onclick="showPanel('dashboard')" id="tb-dashboard">dashboard</button><button class="tb-btn" onclick="showPanel('blog')" id="tb-blog">blog</button><button class="tb-btn" onclick="showPanel('projetos')" id="tb-projetos">projetos</button><button class="tb-btn" onclick="showPanel('site')" id="tb-site">site</button><button class="tb-btn" onclick="showPanel('settings')" id="tb-settings">config</button></div><div class="tb-right"><button class="dark-toggle" onclick="toggleDark()">◑</button><button class="publish-btn" onclick="openPublish()">[ PUBLISH ]</button><button class="logout-btn" onclick="doLogout()">sair</button></div></div><div id="admin-main"><div class="admin-panel on" id="panel-dashboard"><div class="panel-head"><div><div class="panel-title">Dashboard</div><div class="panel-sub">// visão geral · bydan.com.br</div></div><div style="display:flex;gap:8px;"><a class="btn btn-sm" href="../index.html" target="_blank">[ ver site ]</a></div></div><div id="token-warning" style="display:none;font-family:var(--vt);font-size:0.82rem;padding:10px 16px;border:1px solid var(--amber);color:var(--amber);letter-spacing:0.08em;margin-bottom:20px;background:rgba(200,168,112,0.08);">⚠ token do github expira em breve. vá em <button onclick="showPanel('settings')" style="background:none;border:none;color:var(--amber);font-family:var(--vt);font-size:0.82rem;letter-spacing:0.08em;cursor:pointer;text-decoration:underline;">Config → GitHub</button> para renovar.</div><div class="stats-grid" id="dash-stats"></div><div class="site-section-head">// ações rápidas</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;"><button class="btn btn-primary" onclick="showPanel('blog');openPostEditor()">+ novo post</button><button class="btn btn-primary" onclick="showPanel('projetos');openProjEditor()">+ novo projeto</button><button class="btn" onclick="openPublish()">[ publish ]</button><a class="btn" href="../index.html" target="_blank">[ ver site ]</a><a class="btn" href="../feed.xml" target="_blank">[ rss ]</a></div><div class="site-section-head">// atividade recente</div><div class="activity-feed" id="dash-activity"></div></div><div class="admin-panel" id="panel-blog"><div class="panel-head"><div><div class="panel-title">Blog</div><div class="panel-sub">// transmissões &amp; registros</div></div><button class="btn btn-primary" onclick="openPostEditor()">+ novo post</button></div><div id="blog-list"></div><div id="post-editor" style="display:none;"><div class="panel-head" style="margin-top:24px;"><div><div class="panel-title" id="post-editor-title">Novo Post</div><div class="panel-sub">// editor de transmissão</div></div><div style="display:flex;gap:8px;"><button class="btn" onclick="closePostEditor()">cancelar</button><button class="btn btn-success" onclick="savePost('draft')">salvar rascunho</button><button class="btn btn-primary" onclick="savePost('published')">publicar</button></div></div><input type="hidden" id="post-editing-id"><div class="form-row"><div class="form-group"><label class="form-label">título <span>*</span></label><input class="form-input" type="text" id="post-title" placeholder="Título do post" oninput="updatePostSlug(this.value)"></div><div class="form-group"><label class="form-label">data de publicação</label><input class="form-input" type="date" id="post-date"></div></div><div class="form-row"><div class="form-group"><label class="form-label">slug (URL)</label><input class="form-input" type="text" id="post-slug" placeholder="gerado-automaticamente"><div class="form-hint">usado na URL e no RSS</div></div><div class="form-group"><label class="form-label">agendar publicação</label><input class="form-input" type="datetime-local" id="post-schedule"><div class="form-hint">deixe vazio para publicar agora</div></div></div><div class="form-group"><label class="form-label">excerto / resumo</label><textarea class="form-textarea" id="post-excerpt" rows="3" placeholder="Breve resumo que aparece na listagem..."></textarea></div><div class="form-group"><label class="form-label">tags <small style="color:var(--dim)">(Enter para adicionar)</small></label><div class="tags-input-wrap" id="post-tags-wrap"><input class="tags-new-input" id="post-tags-input" placeholder="tag..." onkeydown="handleTagKey(event,'post-tags')"></div></div><div class="form-group"><label class="form-label">imagem de capa</label><div class="upload-zone" onclick="document.getElementById('cover-upload').click()" ondragover="dragOver(event)" ondrop="dropFile(event,'cover')"><input type="file" id="cover-upload" accept="image/*" onchange="handleCoverUpload(this)"><div class="upload-zone-text" id="cover-upload-text">[ clique ou arraste uma imagem ]</div></div><div class="form-hint" style="margin-top:6px;color:var(--amber);">📐 resolução recomendada: <strong>1200×630px</strong> (proporção 16:9) · max 5MB · PNG ou JPG</div><img id="cover-preview" class="img-preview" style="display:none"><button id="cover-remove-btn" class="btn btn-sm btn-danger" style="display:none;margin-top:6px;" onclick="removeCover()">remover capa</button><input type="hidden" id="post-cover-data"><input type="hidden" id="post-cover-alt"></div><div class="form-group"><label class="form-label">conteúdo <span>*</span></label><div class="editor-tabs"><button class="editor-tab on" onclick="switchEditorTab('write')">escrever</button><button class="editor-tab" onclick="switchEditorTab('preview')">pré-visualizar</button><button class="editor-tab" onclick="switchEditorTab('fullpreview')">prévia completa</button></div><div class="editor-toolbar" id="editor-toolbar"><button class="ed-btn" onclick="edCmd('bold')" title="Negrito"><b>B</b></button><button class="ed-btn" onclick="edCmd('italic')" title="Itálico"><i>I</i></button><button class="ed-btn" onclick="edCmd('underline')" title="Sublinhado"><u>U</u></button><button class="ed-btn" onclick="edCmd('strikeThrough')" title="Tachado"><s>S</s></button><div class="ed-sep"></div><button class="ed-btn" onclick="edInsert('h2')" title="Título">H2</button><button class="ed-btn" onclick="edInsert('h3')" title="Subtítulo">H3</button><button class="ed-btn" onclick="edInsert('p')" title="Parágrafo">¶</button><button class="ed-btn" onclick="edInsert('bq')" title="Citação">"</button><button class="ed-btn" onclick="edInsert('ul')" title="Lista">•</button><div class="ed-sep"></div><button class="ed-btn" onclick="edInsert('hr')" title="Separador">—</button><button class="ed-btn" onclick="insertLink()" title="Link">🔗</button><button class="ed-btn" onclick="insertImageEmbed()" title="Imagem inline">⬜</button><button class="ed-btn" onclick="insertVideoEmbed()" title="Vídeo (URL)">▶</button><button class="ed-btn" onclick="edInsert('code')" title="Código">{ }</button><div class="ed-sep"></div><button class="ed-btn" onclick="edCmd('removeFormat')" title="Limpar formatação">✕</button></div><div class="editor-area" id="post-content-editor" contenteditable="true"></div><div class="editor-preview" id="post-content-preview" style="display:none;"></div></div><div id="full-preview-modal" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:500;overflow:auto;padding:32px;"><div style="max-width:720px;margin:0 auto;"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><button class="btn" onclick="closeFullPreview()">[ ← fechar prévia ]</button><span style="font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.1em;">// prévia real do post</span></div><div id="full-preview-content" style="border:1px solid var(--lavender);background:var(--paper);padding:24px;box-shadow:2px 2px 0 var(--lavender);font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--muted);line-height:2.2;"></div></div></div><div class="form-group"><label class="form-label">anexos (imagens, vídeos, PDFs, arquivos)</label><div class="upload-zone" onclick="document.getElementById('attach-upload').click()" ondragover="dragOver(event)" ondrop="dropFile(event,'attach')" id="attach-zone"><input type="file" id="attach-upload" multiple accept="image/*,video/*,.pdf,.zip,.rar,.txt,.md" onchange="handleAttachUpload(this)"><div class="upload-zone-text">[ clique ou arraste arquivos · imagens, vídeos, PDFs, zip ]</div></div><div class="attachment-list" id="attach-list"></div></div><div class="form-group"><label class="form-label">status</label><select class="form-select" id="post-status"><option value="draft">rascunho</option><option value="published">publicado</option></select></div></div></div><div class="admin-panel" id="panel-projetos"><div class="panel-head"><div><div class="panel-title">Projetos</div><div class="panel-sub">// estruturas digitais</div></div><button class="btn btn-primary" onclick="openProjEditor()">+ novo projeto</button></div><div id="proj-list"></div><div id="proj-editor" style="display:none;margin-top:24px;"><div class="panel-head"><div><div class="panel-title" id="proj-editor-title">Novo Projeto</div><div class="panel-sub">// editor de projeto</div></div><div style="display:flex;gap:8px;"><button class="btn" onclick="closeProjEditor()">cancelar</button><button class="btn btn-primary" onclick="saveProj()">salvar</button></div></div><input type="hidden" id="proj-editing-id"><div class="form-row"><div class="form-group"><label class="form-label">nome do projeto <span>*</span></label><input class="form-input" type="text" id="proj-title" placeholder="nome_do_projeto"></div><div class="form-group"><label class="form-label">ano</label><input class="form-input" type="text" id="proj-year" placeholder="2026"></div></div><div class="form-group"><label class="form-label">descrição curta (card)</label><textarea class="form-textarea" id="proj-desc" rows="2" placeholder="Breve descrição para o card..."></textarea></div><div class="form-group"><label class="form-label">descrição longa</label><textarea class="form-textarea" id="proj-longdesc" rows="4" placeholder="Descrição completa do projeto..."></textarea></div><div class="form-group"><label class="form-label">tags</label><div class="tags-input-wrap" id="proj-tags-wrap"><input class="tags-new-input" id="proj-tags-input" placeholder="tag..." onkeydown="handleTagKey(event,'proj-tags')"></div></div><div class="form-group"><label class="form-label">imagem de capa</label><div class="upload-zone" onclick="document.getElementById('proj-cover-upload').click()" ondragover="dragOver(event)" ondrop="dropFile(event,'proj-cover')"><input type="file" id="proj-cover-upload" accept="image/*" onchange="handleProjCoverUpload(this)"><div class="upload-zone-text" id="proj-cover-text">[ clique ou arraste uma imagem ]</div></div><div class="form-hint" style="margin-top:6px;color:var(--amber);">📐 resolução recomendada: <strong>800×450px</strong> (proporção 16:9) · max 5MB · PNG ou JPG</div><img id="proj-cover-preview" class="img-preview" style="display:none"><input type="hidden" id="proj-cover-data"></div><div class="form-row-3"><div class="form-group"><label class="form-label">link itch.io</label><input class="form-input" type="url" id="proj-link-itch" placeholder="https://itch.io/..."></div><div class="form-group"><label class="form-label">link github</label><input class="form-input" type="url" id="proj-link-github" placeholder="https://github.com/..."></div><div class="form-group"><label class="form-label">link demo</label><input class="form-input" type="url" id="proj-link-demo" placeholder="https://..."></div></div><div class="form-group"><label class="form-label">status</label><select class="form-select" id="proj-status"><option value="published">publicado</option><option value="draft">rascunho (oculto)</option></select></div></div></div><div class="admin-panel" id="panel-site"><div class="panel-head"><div><div class="panel-title">Editor do Site</div><div class="panel-sub">// textos, meta, conteúdo</div></div><div style="display:flex;gap:8px;"><button class="btn" onclick="reloadSiteContent()">↺ carregar dados</button><button class="btn btn-primary" onclick="saveSiteContent()">salvar alterações</button></div></div><div class="site-section-head">// cabeçalho & identidade</div><div class="section-card"><div class="form-row"><div class="form-group"><label class="form-label">título do site</label><input class="form-input" type="text" id="s-siteTitle"></div><div class="form-group"><label class="form-label">subtítulo</label><input class="form-input" type="text" id="s-siteSub"></div></div><div class="form-group"><label class="form-label">símbolo do banner</label><input class="form-input" type="text" id="s-siteSym"></div><div class="form-group"><label class="form-label">texto do marquee</label><input class="form-input" type="text" id="s-marquee"></div><div class="form-group"><label class="form-label">texto flutuante (wander)</label><input class="form-input" type="text" id="s-wanderText"></div><div class="form-group"><label class="form-label">texto do typewriter (use \n para quebra de linha)</label><textarea class="form-textarea" id="s-typewriterMsg" rows="3"></textarea></div><div class="form-group"><label class="form-label">badges (separados por vírgula)</label><input class="form-input" type="text" id="s-badges" placeholder="bydan.com.br, dreamcore, gamedev"><div class="form-hint">cada badge aparece abaixo do banner principal</div></div></div><div class="site-section-head">// seção sobre</div><div class="section-card"><div class="form-group">
-  <label class="form-label">foto / símbolo do sobre</label>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-    <button class="btn btn-sm" id="av-tab-emoji" onclick="setAvatarMode('emoji')" style="font-size:0.78rem;">Emoji / Símbolo</button>
-    <button class="btn btn-sm" id="av-tab-sigla" onclick="setAvatarMode('sigla')" style="font-size:0.78rem;">Sigla / Texto</button>
-    <button class="btn btn-sm" id="av-tab-img" onclick="setAvatarMode('img')" style="font-size:0.78rem;">Imagem / URL</button>
-  </div>
-  <div id="av-mode-emoji">
-    <input class="form-input" type="text" id="s-avatar" placeholder="D" style="max-width:120px">
-    <div class="form-hint">letra, emoji ou símbolo · ex: D · ✦ · 🌙 · ◌</div>
-  </div>
-  <div id="av-mode-sigla" style="display:none">
-    <input class="form-input" type="text" id="s-avatar-sigla" placeholder="DAN" style="max-width:120px">
-    <div class="form-hint">sigla curta · ex: DAN · B.D · bydan</div>
-  </div>
-  <div id="av-mode-img" style="display:none">
-    <input class="form-input" type="url" id="s-avatar-url" placeholder="https://..." style="margin-bottom:6px;">
-    <div class="form-hint">URL de imagem · recomendado: 400×400px (1:1) · PNG/JPG/WebP</div>
-    <div style="margin-top:8px;">
-      <div class="upload-zone" onclick="document.getElementById('av-file-upload').click()" style="padding:12px;">
-        <input type="file" id="av-file-upload" accept="image/*" onchange="handleAvatarUpload(this)">
-        <div class="upload-zone-text">[ ou faça upload de uma foto · quadrada · 400×400px ]</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>bydan — painel admin</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/admin.css">
+  </head>
+  <body>
+    <div id="login-screen">
+      <div class="login-box">
+        <span class="login-title">bydan</span>
+        <span class="login-sub">// acesso restrito</span>
+        <label class="login-label">senha de administrador</label>
+        <input class="login-input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+        <button class="login-btn" onclick="doLogin()">[ entrar ]</button>
+        <div class="login-err" id="login-err">senha incorreta. tente novamente.</div>
+        <div class="login-attempts" id="login-attempts">
+        </div>
+        <div class="login-back">
+          <a href="../index.html" class="login-back-link">[ ← voltar ao site ]</a>
+        </div>
       </div>
-      <img id="av-img-preview" style="max-width:80px;max-height:80px;object-fit:cover;border:1px solid var(--lavender);margin-top:8px;border-radius:2px;display:none;">
     </div>
-  </div>
-  <input type="hidden" id="s-avatar-mode" value="emoji">
-</div><div class="form-group"><label class="form-label">parágrafos (um por linha)</label><textarea class="form-textarea" id="s-sobre-paras" rows="5"></textarea><div class="form-hint">cada linha vira um parágrafo separado</div></div><div class="form-group"><label class="form-label">nota manuscrita (handnote)</label><input class="form-input" type="text" id="s-handnote"></div></div><div class="site-section-head">// filosofia / manifesto</div><div class="section-card"><div class="form-group"><label class="form-label">citação principal</label><input class="form-input" type="text" id="s-filo-quote"></div><div class="form-group"><label class="form-label">parágrafos (um por linha)</label><textarea class="form-textarea" id="s-filo-paras" rows="5"></textarea></div></div><div class="site-section-head">// novidades (início)</div><div class="section-card" id="s-novidades-wrap"></div><div class="site-section-head">// stack / ferramentas</div><div class="section-card"><div id="s-stack-rows"></div><button class="btn btn-sm" onclick="addStackRow()" style="margin-top:8px;">+ adicionar ferramenta</button></div><div class="site-section-head">// contato</div><div class="section-card"><div class="form-group"><label class="form-label">nota de contato</label><input class="form-input" type="text" id="s-contato-note"></div><div id="s-contato-links-wrap"></div><button class="btn btn-sm" onclick="addContactLink()" style="margin-top:8px;">+ adicionar link</button></div><div class="site-section-head">// rodapé</div><div class="section-card"><div class="form-row"><div class="form-group"><label class="form-label">símbolo do footer</label><input class="form-input" type="text" id="s-footerSym"></div><div class="form-group"><label class="form-label">texto do footer</label><input class="form-input" type="text" id="s-footerInfo"></div></div></div><div style="text-align:right;margin-top:8px;"><button class="btn btn-primary" onclick="saveSiteContent()">salvar alterações</button></div></div><div class="admin-panel" id="panel-settings"><div class="panel-head"><div><div class="panel-title">Configurações</div><div class="panel-sub">// admin &amp; segurança</div></div></div><div class="site-section-head">// alterar senha de administrador</div><div class="section-card" style="max-width:440px;"><div class="form-group"><label class="form-label">senha atual</label><input class="form-input" type="password" id="cfg-pass-old"></div><div class="form-group"><label class="form-label">nova senha</label><input class="form-input" type="password" id="cfg-pass-new"></div><div class="form-group"><label class="form-label">confirmar nova senha</label><input class="form-input" type="password" id="cfg-pass-confirm"></div><button class="btn btn-primary" onclick="changePassword()">alterar senha</button></div><div class="site-section-head">// música ambiente</div>
-<div class="section-card">
-  <p style="font-family:var(--vt);font-size:0.82rem;color:var(--dim);letter-spacing:0.08em;line-height:2.2;margin-bottom:16px;">Configure a música de fundo do site. Pode usar um arquivo de áudio ou escolher um dos presets gerados.</p>
-  <div class="form-group">
-    <label class="form-label">modo de som</label>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-      <button class="btn btn-sm" id="mus-tab-preset" onclick="setMusicMode('preset')">Preset Gerado</button>
-      <button class="btn btn-sm" id="mus-tab-url" onclick="setMusicMode('url')">URL de Áudio</button>
-      <button class="btn btn-sm" id="mus-tab-file" onclick="setMusicMode('file')">Upload de Arquivo</button>
-    </div>
-    <div id="mus-mode-preset">
-      <select class="form-select" id="cfg-music-preset">
-        <option value="noise">Ruído Suave (padrão) — estática filtrada</option>
-        <option value="rain">Chuva Sintética — gotas digitais</option>
-        <option value="drone">Drone Ambient — nota contínua</option>
-        <option value="glitch">Glitch Leve — texturas quebradas</option>
-        <option value="cassette">Cassete Antigo — lo-fi morno</option>
-      </select>
-      <div class="form-hint">preset gerado em tempo real · não precisa de arquivo</div>
-      <button class="btn btn-sm btn-primary" style="margin-top:8px;" onclick="previewMusicPreset()">[ ▶ testar preset ]</button>
-      <button class="btn btn-sm" style="margin-top:8px;" onclick="stopMusicPreview()">[ ■ parar ]</button>
-    </div>
-    <div id="mus-mode-url" style="display:none">
-      <input class="form-input" type="url" id="cfg-music-url" placeholder="https://... .mp3 / .ogg / .wav">
-      <div class="form-hint">URL direta de arquivo de áudio · MP3, OGG ou WAV · deve ser acessível publicamente</div>
-    </div>
-    <div id="mus-mode-file" style="display:none">
-      <div class="upload-zone" onclick="document.getElementById('music-file-upload').click()">
-        <input type="file" id="music-file-upload" accept="audio/*" onchange="handleMusicUpload(this)">
-        <div class="upload-zone-text" id="music-upload-text">[ clique ou arraste um arquivo de áudio · MP3 / OGG / WAV ]</div>
+    <div id="admin-app">
+      <div id="topbar">
+        <div class="tb-logo">
+          bydan
+          <span>ADMIN</span>
+        </div>
+        <div class="tb-nav">
+          <button class="tb-btn on" onclick="showPanel('dashboard')" id="tb-dashboard">dashboard</button>
+          <button class="tb-btn" onclick="showPanel('blog')" id="tb-blog">blog</button>
+          <button class="tb-btn" onclick="showPanel('projetos')" id="tb-projetos">projetos</button>
+          <button class="tb-btn" onclick="showPanel('site')" id="tb-site">site</button>
+          <button class="tb-btn" onclick="showPanel('settings')" id="tb-settings">config</button>
+        </div>
+        <div class="tb-right">
+          <button class="dark-toggle" onclick="toggleDark()">◑</button>
+          <button class="publish-btn" onclick="openPublish()">[ PUBLISH ]</button>
+          <button class="logout-btn" onclick="doLogout()">sair</button>
+        </div>
       </div>
-      <div class="form-hint" style="color:var(--amber);">⚠ o arquivo será embutido em base64 no content.json — prefira arquivos pequenos (max 3MB)</div>
+      <div id="admin-main">
+        <div class="admin-panel on" id="panel-dashboard">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Dashboard</div>
+              <div class="panel-sub">// visão geral · bydan.com.br</div>
+            </div>
+            <div class="flex-row">
+              <a class="btn btn-sm" href="../index.html" target="_blank">[ ver site ]</a>
+            </div>
+          </div>
+          <div id="token-warning" class="token-warning">
+            ⚠ token do github expira em breve. vá em
+            <button onclick="showPanel('settings')" class="token-warning-btn">Config → GitHub</button>
+            para renovar.
+          </div>
+          <div class="stats-grid" id="dash-stats">
+          </div>
+          <div class="site-section-head">// ações rápidas</div>
+          <div class="flex-row--gap-10-mb">
+            <button class="btn btn-primary" onclick="showPanel('blog');openPostEditor()">+ novo post</button>
+            <button class="btn btn-primary" onclick="showPanel('projetos');openProjEditor()">+ novo projeto</button>
+            <button class="btn" onclick="openPublish()">[ publish ]</button>
+            <a class="btn" href="../index.html" target="_blank">[ ver site ]</a>
+            <a class="btn" href="../feed.xml" target="_blank">[ rss ]</a>
+          </div>
+          <div class="site-section-head">// atividade recente</div>
+          <div class="activity-feed" id="dash-activity">
+          </div>
+        </div>
+        <div class="admin-panel" id="panel-blog">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Blog</div>
+              <div class="panel-sub">// transmissões &amp; registros</div>
+            </div>
+            <button class="btn btn-primary" onclick="openPostEditor()">+ novo post</button>
+          </div>
+          <div id="blog-list">
+          </div>
+          <div id="post-editor" class="is-hidden">
+            <div class="panel-head mt-24">
+              <div>
+                <div class="panel-title" id="post-editor-title">Novo Post</div>
+                <div class="panel-sub">// editor de transmissão</div>
+              </div>
+              <div class="flex-row">
+                <button class="btn" onclick="closePostEditor()">cancelar</button>
+                <button class="btn btn-success" onclick="savePost('draft')">salvar rascunho</button>
+                <button class="btn btn-primary" onclick="savePost('published')">publicar</button>
+              </div>
+            </div>
+            <input type="hidden" id="post-editing-id">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  título
+                  <span>*</span>
+                </label>
+                <input class="form-input" type="text" id="post-title" placeholder="Título do post" oninput="updatePostSlug(this.value)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">data de publicação</label>
+                <input class="form-input" type="date" id="post-date">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">slug (URL)</label>
+                <input class="form-input" type="text" id="post-slug" placeholder="gerado-automaticamente">
+                <div class="form-hint">usado na URL e no RSS</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">agendar publicação</label>
+                <input class="form-input" type="datetime-local" id="post-schedule">
+                <div class="form-hint">deixe vazio para publicar agora</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">excerto / resumo</label>
+              <textarea class="form-textarea" id="post-excerpt" rows="3" placeholder="Breve resumo que aparece na listagem...">
+              </textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">
+                tags
+                <small class="text-dim">(Enter para adicionar)</small>
+              </label>
+              <div class="tags-input-wrap" id="post-tags-wrap">
+                <input class="tags-new-input" id="post-tags-input" placeholder="tag..." onkeydown="handleTagKey(event,'post-tags')">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">imagem de capa</label>
+              <div class="upload-zone" onclick="document.getElementById('cover-upload').click()" ondragover="dragOver(event)" ondrop="dropFile(event,'cover')">
+                <input type="file" id="cover-upload" accept="image/*" onchange="handleCoverUpload(this)">
+                <div class="upload-zone-text" id="cover-upload-text">[ clique ou arraste uma imagem ]</div>
+              </div>
+              <div class="form-hint form-hint--amber">
+                📐 resolução recomendada:
+                <strong>1200×630px</strong>
+                (proporção 16:9) · max 5MB · PNG ou JPG
+              </div>
+              <img id="cover-preview" class="img-preview">
+              <button id="cover-remove-btn" class="btn btn-sm btn-danger" onclick="removeCover()">remover capa</button>
+              <input type="hidden" id="post-cover-data">
+              <input type="hidden" id="post-cover-alt">
+            </div>
+            <div class="form-group">
+              <label class="form-label">
+                conteúdo
+                <span>*</span>
+              </label>
+              <div class="editor-tabs">
+                <button class="editor-tab on" onclick="switchEditorTab('write')">escrever</button>
+                <button class="editor-tab" onclick="switchEditorTab('preview')">pré-visualizar</button>
+                <button class="editor-tab" onclick="switchEditorTab('fullpreview')">prévia completa</button>
+              </div>
+              <div class="editor-toolbar" id="editor-toolbar">
+                <button class="ed-btn" onclick="edCmd('bold')" title="Negrito">
+                  <b>B</b>
+                </button>
+                <button class="ed-btn" onclick="edCmd('italic')" title="Itálico">
+                  <i>I</i>
+                </button>
+                <button class="ed-btn" onclick="edCmd('underline')" title="Sublinhado">
+                  <u>U</u>
+                </button>
+                <button class="ed-btn" onclick="edCmd('strikeThrough')" title="Tachado">
+                  <s>S</s>
+                </button>
+                <div class="ed-sep">
+                </div>
+                <button class="ed-btn" onclick="edInsert('h2')" title="Título">H2</button>
+                <button class="ed-btn" onclick="edInsert('h3')" title="Subtítulo">H3</button>
+                <button class="ed-btn" onclick="edInsert('p')" title="Parágrafo">¶</button>
+                <button class="ed-btn" onclick="edInsert('bq')" title="Citação">"</button>
+                <button class="ed-btn" onclick="edInsert('ul')" title="Lista">•</button>
+                <div class="ed-sep">
+                </div>
+                <button class="ed-btn" onclick="edInsert('hr')" title="Separador">—</button>
+                <button class="ed-btn" onclick="insertLink()" title="Link">🔗</button>
+                <button class="ed-btn" onclick="insertImageEmbed()" title="Imagem inline">⬜</button>
+                <button class="ed-btn" onclick="insertVideoEmbed()" title="Vídeo (URL)">▶</button>
+                <button class="ed-btn" onclick="edInsert('code')" title="Código">{ }</button>
+                <div class="ed-sep">
+                </div>
+                <button class="ed-btn" onclick="edCmd('removeFormat')" title="Limpar formatação">✕</button>
+              </div>
+              <div class="editor-area" id="post-content-editor" contenteditable="true">
+              </div>
+              <div class="editor-preview" id="post-content-preview" class="editor-preview is-hidden">
+              </div>
+            </div>
+            <div id="full-preview-modal" class="full-preview-modal">
+              <div class="full-preview-inner">
+                <div class="flex-row--center">
+                  <button class="btn" onclick="closeFullPreview()">[ ← fechar prévia ]</button>
+                  <span class="label-inline">// prévia real do post</span>
+                </div>
+                <div id="full-preview-content" class="full-preview-content">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">anexos (imagens, vídeos, PDFs, arquivos)</label>
+              <div class="upload-zone" onclick="document.getElementById('attach-upload').click()" ondragover="dragOver(event)" ondrop="dropFile(event,'attach')" id="attach-zone">
+                <input type="file" id="attach-upload" multiple accept="image/*,video/*,.pdf,.zip,.rar,.txt,.md" onchange="handleAttachUpload(this)">
+                <div class="upload-zone-text">[ clique ou arraste arquivos · imagens, vídeos, PDFs, zip ]</div>
+              </div>
+              <div class="attachment-list" id="attach-list">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">status</label>
+              <select class="form-select" id="post-status">
+                <option value="draft">rascunho</option>
+                <option value="published">publicado</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="admin-panel" id="panel-projetos">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Projetos</div>
+              <div class="panel-sub">// estruturas digitais</div>
+            </div>
+            <button class="btn btn-primary" onclick="openProjEditor()">+ novo projeto</button>
+          </div>
+          <div id="proj-list">
+          </div>
+          <div id="proj-editor" class="is-hidden mt-24">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title" id="proj-editor-title">Novo Projeto</div>
+                <div class="panel-sub">// editor de projeto</div>
+              </div>
+              <div class="flex-row">
+                <button class="btn" onclick="closeProjEditor()">cancelar</button>
+                <button class="btn btn-primary" onclick="saveProj()">salvar</button>
+              </div>
+            </div>
+            <input type="hidden" id="proj-editing-id">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  nome do projeto
+                  <span>*</span>
+                </label>
+                <input class="form-input" type="text" id="proj-title" placeholder="nome_do_projeto">
+              </div>
+              <div class="form-group">
+                <label class="form-label">ano</label>
+                <input class="form-input" type="text" id="proj-year" placeholder="2026">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">descrição curta (card)</label>
+              <textarea class="form-textarea" id="proj-desc" rows="2" placeholder="Breve descrição para o card...">
+              </textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">descrição longa</label>
+              <textarea class="form-textarea" id="proj-longdesc" rows="4" placeholder="Descrição completa do projeto...">
+              </textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">tags</label>
+              <div class="tags-input-wrap" id="proj-tags-wrap">
+                <input class="tags-new-input" id="proj-tags-input" placeholder="tag..." onkeydown="handleTagKey(event,'proj-tags')">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">imagem de capa</label>
+              <div class="upload-zone" onclick="document.getElementById('proj-cover-upload').click()" ondragover="dragOver(event)" ondrop="dropFile(event,'proj-cover')">
+                <input type="file" id="proj-cover-upload" accept="image/*" onchange="handleProjCoverUpload(this)">
+                <div class="upload-zone-text" id="proj-cover-text">[ clique ou arraste uma imagem ]</div>
+              </div>
+              <div class="form-hint form-hint--amber">
+                📐 resolução recomendada:
+                <strong>800×450px</strong>
+                (proporção 16:9) · max 5MB · PNG ou JPG
+              </div>
+              <img id="proj-cover-preview" class="img-preview">
+              <input type="hidden" id="proj-cover-data">
+            </div>
+            <div class="form-row-3">
+              <div class="form-group">
+                <label class="form-label">link itch.io</label>
+                <input class="form-input" type="url" id="proj-link-itch" placeholder="https://itch.io/...">
+              </div>
+              <div class="form-group">
+                <label class="form-label">link github</label>
+                <input class="form-input" type="url" id="proj-link-github" placeholder="https://github.com/...">
+              </div>
+              <div class="form-group">
+                <label class="form-label">link demo</label>
+                <input class="form-input" type="url" id="proj-link-demo" placeholder="https://...">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">status</label>
+              <select class="form-select" id="proj-status">
+                <option value="published">publicado</option>
+                <option value="draft">rascunho (oculto)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="admin-panel" id="panel-site">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Editor do Site</div>
+              <div class="panel-sub">// textos, meta, conteúdo</div>
+            </div>
+            <div class="flex-row">
+              <button class="btn" onclick="reloadSiteContent()">↺ carregar dados</button>
+              <button class="btn btn-primary" onclick="saveSiteContent()">salvar alterações</button>
+            </div>
+          </div>
+          <div class="site-section-head">// cabeçalho & identidade</div>
+          <div class="section-card">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">título do site</label>
+                <input class="form-input" type="text" id="s-siteTitle">
+              </div>
+              <div class="form-group">
+                <label class="form-label">subtítulo</label>
+                <input class="form-input" type="text" id="s-siteSub">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">símbolo do banner</label>
+              <input class="form-input" type="text" id="s-siteSym">
+            </div>
+            <div class="form-group">
+              <label class="form-label">texto do marquee</label>
+              <input class="form-input" type="text" id="s-marquee">
+            </div>
+            <div class="form-group">
+              <label class="form-label">texto flutuante (wander)</label>
+              <input class="form-input" type="text" id="s-wanderText">
+            </div>
+            <div class="form-group">
+              <label class="form-label">texto do typewriter (use \n para quebra de linha)</label>
+              <textarea class="form-textarea" id="s-typewriterMsg" rows="3">
+              </textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">badges (separados por vírgula)</label>
+              <input class="form-input" type="text" id="s-badges" placeholder="bydan.com.br, dreamcore, gamedev">
+              <div class="form-hint">cada badge aparece abaixo do banner principal</div>
+            </div>
+          </div>
+          <div class="site-section-head">// seção sobre</div>
+          <div class="section-card">
+            <div class="form-group">
+              <label class="form-label">foto / símbolo do sobre</label>
+              <div class="flex-row--tabs">
+                <button class="btn btn-sm" id="av-tab-emoji" onclick="setAvatarMode('emoji')" >Emoji / Símbolo</button>
+                <button class="btn btn-sm" id="av-tab-sigla" onclick="setAvatarMode('sigla')" >Sigla / Texto</button>
+                <button class="btn btn-sm" id="av-tab-img" onclick="setAvatarMode('img')" >Imagem / URL</button>
+              </div>
+              <div id="av-mode-emoji">
+                <input class="form-input" type="text" id="s-avatar" placeholder="D" class="max-w-120">
+                <div class="form-hint">letra, emoji ou símbolo · ex: D · ✦ · 🌙 · ◌</div>
+              </div>
+              <div id="av-mode-sigla" class="is-hidden">
+                <input class="form-input" type="text" id="s-avatar-sigla" placeholder="DAN" class="max-w-120">
+                <div class="form-hint">sigla curta · ex: DAN · B.D · bydan</div>
+              </div>
+              <div id="av-mode-img" class="is-hidden">
+                <input class="form-input" type="url" id="s-avatar-url" placeholder="https://..." class="mb-6">
+                <div class="form-hint">URL de imagem · recomendado: 400×400px (1:1) · PNG/JPG/WebP</div>
+                <div class="about-block">
+                  <div class="upload-zone" onclick="document.getElementById('av-file-upload').click()" class="upload-zone--compact">
+                    <input type="file" id="av-file-upload" accept="image/*" onchange="handleAvatarUpload(this)">
+                    <div class="upload-zone-text">[ ou faça upload de uma foto · quadrada · 400×400px ]</div>
+                  </div>
+                  <img id="av-img-preview" class="avatar-preview">
+                </div>
+              </div>
+              <input type="hidden" id="s-avatar-mode" value="emoji">
+            </div>
+            <div class="form-group">
+              <label class="form-label">parágrafos (um por linha)</label>
+              <textarea class="form-textarea" id="s-sobre-paras" rows="5">
+              </textarea>
+              <div class="form-hint">cada linha vira um parágrafo separado</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">nota manuscrita (handnote)</label>
+              <input class="form-input" type="text" id="s-handnote">
+            </div>
+          </div>
+          <div class="site-section-head">// filosofia / manifesto</div>
+          <div class="section-card">
+            <div class="form-group">
+              <label class="form-label">citação principal</label>
+              <input class="form-input" type="text" id="s-filo-quote">
+            </div>
+            <div class="form-group">
+              <label class="form-label">parágrafos (um por linha)</label>
+              <textarea class="form-textarea" id="s-filo-paras" rows="5">
+              </textarea>
+            </div>
+          </div>
+          <div class="site-section-head">// novidades (início)</div>
+          <div class="section-card" id="s-novidades-wrap">
+          </div>
+          <div class="site-section-head">// stack / ferramentas</div>
+          <div class="section-card">
+            <div id="s-stack-rows">
+            </div>
+            <button class="btn btn-sm" onclick="addStackRow()" class="mt-8">+ adicionar ferramenta</button>
+          </div>
+          <div class="site-section-head">// contato</div>
+          <div class="section-card">
+            <div class="form-group">
+              <label class="form-label">nota de contato</label>
+              <input class="form-input" type="text" id="s-contato-note">
+            </div>
+            <div id="s-contato-links-wrap">
+            </div>
+            <button class="btn btn-sm" onclick="addContactLink()" class="mt-8">+ adicionar link</button>
+          </div>
+          <div class="site-section-head">// rodapé</div>
+          <div class="section-card">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">símbolo do footer</label>
+                <input class="form-input" type="text" id="s-footerSym">
+              </div>
+              <div class="form-group">
+                <label class="form-label">texto do footer</label>
+                <input class="form-input" type="text" id="s-footerInfo">
+              </div>
+            </div>
+          </div>
+          <div class="text-right-actions">
+            <button class="btn btn-primary" onclick="saveSiteContent()">salvar alterações</button>
+          </div>
+        </div>
+        <div class="admin-panel" id="panel-settings">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Configurações</div>
+              <div class="panel-sub">// admin &amp; segurança</div>
+            </div>
+          </div>
+          <div class="site-section-head">// alterar senha de administrador</div>
+          <div class="section-card max-w-440">
+            <div class="form-group">
+              <label class="form-label">senha atual</label>
+              <input class="form-input" type="password" id="cfg-pass-old">
+            </div>
+            <div class="form-group">
+              <label class="form-label">nova senha</label>
+              <input class="form-input" type="password" id="cfg-pass-new">
+            </div>
+            <div class="form-group">
+              <label class="form-label">confirmar nova senha</label>
+              <input class="form-input" type="password" id="cfg-pass-confirm">
+            </div>
+            <button class="btn btn-primary" onclick="changePassword()">alterar senha</button>
+          </div>
+          <div class="site-section-head">// música ambiente</div>
+          <div class="section-card">
+            <p class="prose-vt">Configure a música de fundo do site. Pode usar um arquivo de áudio ou escolher um dos presets gerados.</p>
+            <div class="form-group">
+              <label class="form-label">modo de som</label>
+              <div class="flex-row--tabs">
+                <button class="btn btn-sm" id="mus-tab-preset" onclick="setMusicMode('preset')">Preset Gerado</button>
+                <button class="btn btn-sm" id="mus-tab-url" onclick="setMusicMode('url')">URL de Áudio</button>
+                <button class="btn btn-sm" id="mus-tab-file" onclick="setMusicMode('file')">Upload de Arquivo</button>
+              </div>
+              <div id="mus-mode-preset">
+                <select class="form-select" id="cfg-music-preset">
+                  <option value="noise">Ruído Suave (padrão) — estática filtrada</option>
+                  <option value="rain">Chuva Sintética — gotas digitais</option>
+                  <option value="drone">Drone Ambient — nota contínua</option>
+                  <option value="glitch">Glitch Leve — texturas quebradas</option>
+                  <option value="cassette">Cassete Antigo — lo-fi morno</option>
+                </select>
+                <div class="form-hint">preset gerado em tempo real · não precisa de arquivo</div>
+                <button class="btn btn-sm btn-primary" class="mt-8" onclick="previewMusicPreset()">[ ▶ testar preset ]</button>
+                <button class="btn btn-sm mt-8" onclick="stopMusicPreview()">[ ■ parar ]</button>
+              </div>
+              <div id="mus-mode-url" class="is-hidden">
+                <input class="form-input" type="url" id="cfg-music-url" placeholder="https://... .mp3 / .ogg / .wav">
+                <div class="form-hint">URL direta de arquivo de áudio · MP3, OGG ou WAV · deve ser acessível publicamente</div>
+              </div>
+              <div id="mus-mode-file" class="is-hidden">
+                <div class="upload-zone" onclick="document.getElementById('music-file-upload').click()">
+                  <input type="file" id="music-file-upload" accept="audio/*" onchange="handleMusicUpload(this)">
+                  <div class="upload-zone-text" id="music-upload-text">[ clique ou arraste um arquivo de áudio · MP3 / OGG / WAV ]</div>
+                </div>
+                <div class="form-hint form-hint--amber">⚠ o arquivo será embutido em base64 no content.json — prefira arquivos pequenos (max 3MB)</div>
+              </div>
+              <input type="hidden" id="cfg-music-mode" value="preset">
+            </div>
+            <div class="form-group">
+              <label class="form-label">volume padrão</label>
+              <div class="flex-row--vol">
+                <input type="range" id="cfg-music-vol" min="0" max="100" value="35" class="flex-1" oninput="document.getElementById('music-vol-disp').textContent=this.value+'%'">
+                <span id="music-vol-disp" class="vol-display">35%</span>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="saveMusicSettings()">salvar configurações de som</button>
+          </div>
+          <div class="site-section-head">// tamanhos de imagem — referência</div>
+          <div class="section-card">
+            <p class="prose-vt prose-vt--mb-12">// guia de resolução para manter o site uniforme</p>
+            <div class="spec-grid">
+              <div class="spec-card">
+                <div class="spec-card__label">CAPA DE POST</div>
+                <div class="spec-card__size">1200 × 630px</div>
+                <div class="spec-card__meta">16:9 · PNG/JPG · max 5MB</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-card__label">CAPA DE PROJETO</div>
+                <div class="spec-card__size">800 × 450px</div>
+                <div class="spec-card__meta">16:9 · PNG/JPG · max 5MB</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-card__label">FOTO DO SOBRE</div>
+                <div class="spec-card__size">400 × 400px</div>
+                <div class="spec-card__meta">1:1 quadrado · PNG/JPG · max 2MB</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-card__label">OG IMAGE (SEO)</div>
+                <div class="spec-card__size">1200 × 630px</div>
+                <div class="spec-card__meta">para redes sociais · PNG</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-card__label">FAVICON</div>
+                <div class="spec-card__size">32 × 32px</div>
+                <div class="spec-card__meta">ICO ou PNG · 16/32/48px</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-card__label">INLINE (BLOG)</div>
+                <div class="spec-card__size">800px largura</div>
+                <div class="spec-card__meta">qualquer altura · PNG/JPG · max 3MB</div>
+              </div>
+            </div>
+            <div class="spec-tip">
+              // dica: use o site
+              <a href="https://squoosh.app" target="_blank" class="text-lilac">squoosh.app</a>
+              para redimensionar e comprar imagens gratuitamente sem sair do browser
+            </div>
+          </div>
+          <div class="site-section-head">// github — publicação automática</div>
+          <div class="section-card">
+            <p class="prose-vt prose-vt--mb-20">
+              Configure uma vez. O botão
+              <span class="text-lilac">[ PUBLISH ]</span>
+              vai subir o conteúdo direto para o repositório via API do GitHub — sem precisar abrir terminal.
+              <br>
+              O token é salvo localmente no seu navegador, criptografado. Troque a cada 90 dias.
+            </p>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">
+                  usuário do github
+                  <span>*</span>
+                </label>
+                <input class="form-input" type="text" id="cfg-gh-user" placeholder="bydan" autocomplete="off">
+                <div class="form-hint">seu @ no github, sem o arroba</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  nome do repositório
+                  <span>*</span>
+                </label>
+                <input class="form-input" type="text" id="cfg-gh-repo" placeholder="bydan" autocomplete="off">
+                <div class="form-hint">nome exato do repositório</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">branch</label>
+                <input class="form-input" type="text" id="cfg-gh-branch" placeholder="main" autocomplete="off">
+                <div class="form-hint">branch principal (geralmente main ou master)</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">caminho do arquivo</label>
+                <input class="form-input" type="text" id="cfg-gh-path" placeholder="data/content.json" autocomplete="off">
+                <div class="form-hint">não mude a menos que tenha movido o arquivo</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">
+                personal access token (PAT)
+                <span>*</span>
+              </label>
+              <div class="flex-row flex-row--align-center">
+                <input class="form-input" type="password" id="cfg-gh-token" placeholder="github_pat_••••••••••••••••••••" autocomplete="off" class="flex-1">
+                <button class="btn btn-sm" onclick="toggleTokenVisibility()" id="token-vis-btn" class="nowrap">[ mostrar ]</button>
+              </div>
+              <div class="form-hint mb-6">
+                Crie em:
+                <a href="https://github.com/settings/tokens/new" target="_blank" class="text-lilac">github.com/settings/tokens</a>
+                →
+                <span class="text-lilac">Fine-grained</span>
+                → selecione seu repositório → permissão
+                <span class="text-lilac">Contents: Read & Write</span>
+              </div>
+            </div>
+            <div id="gh-status-bar" class="gh-status-bar">
+            </div>
+            <div class="flex-row--gap-10 flex-row--align-center">
+              <button class="btn btn-primary" onclick="saveGithubConfig()">salvar configuração</button>
+              <button class="btn" onclick="testGithubConnection()">[ testar conexão ]</button>
+              <span id="gh-saved-indicator" class="gh-saved">✓ configurado</span>
+            </div>
+            <div class="gh-footer-note">
+              <p class="prose-vt prose-vt--sm">
+                ⚠ tokens do GitHub expiram após 90 dias se configurado assim. Quando isso acontecer, volte aqui e cole o novo token.
+                <br>
+                ⚠ nunca compartilhe o token. ele tem permissão de escrita no seu repositório.
+              </p>
+            </div>
+          </div>
+          <div class="site-section-head">// dados & exportação</div>
+          <div class="section-card">
+            <p class="prose-vt mb-16">Exporta o conteúdo atual como JSON para salvar manualmente no repositório, ou importa um JSON existente.</p>
+            <div class="flex-row--gap-10">
+              <button class="btn btn-primary" onclick="exportJSON()">exportar content.json</button>
+              <button class="btn" onclick="importJSON()">importar content.json</button>
+              <button class="btn btn-danger" onclick="clearLocalData()">limpar dados locais</button>
+            </div>
+            <input type="file" id="import-file" accept=".json" class="is-hidden" onchange="handleImport(this)">
+          </div>
+          <div class="site-section-head">// sobre o sistema</div>
+          <div class="section-card section-card--about">
+            <p>bydan cms · versão 1.1</p>
+            <p>hospedagem: github pages · bydan.com.br</p>
+            <p>dados: localStorage + content.json</p>
+            <p class="mt-12">fluxo com token configurado:</p>
+            <p class="text-lilac">editar → PUBLISH → [ subir para o github ] → deploy automático em ~1min</p>
+            <p class="mt-8">fluxo manual (sem token):</p>
+            <p class="text-dim">editar → PUBLISH → baixar JSON → substituir no github → commit</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <input type="hidden" id="cfg-music-mode" value="preset">
-  </div>
-  <div class="form-group">
-    <label class="form-label">volume padrão</label>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <input type="range" id="cfg-music-vol" min="0" max="100" value="35" style="flex:1;" oninput="document.getElementById('music-vol-disp').textContent=this.value+'%'">
-      <span id="music-vol-disp" style="font-family:var(--vt);font-size:0.85rem;color:var(--dim);width:36px;">35%</span>
+    <div id="publish-modal">
+      <div class="modal-box max-w-560">
+        <div class="modal-title">Publicar Alterações</div>
+        <div id="pub-with-token" class="is-hidden">
+          <div class="prose-vt prose-vt--mb-20">
+            Repositório:
+            <span id="pub-repo-display" class="text-lilac">
+            </span>
+            <br>
+            Arquivo:
+            <span class="text-muted-inline">data/content.json</span>
+            <br>
+            Branch:
+            <span id="pub-branch-display" class="text-muted-inline">
+            </span>
+          </div>
+          <div id="pub-progress" class="pub-progress">
+            <div class="label-inline mb-8" id="pub-progress-text">// preparando...</div>
+            <div class="pub-progress-track">
+              <div id="pub-progress-bar" class="pub-progress-bar">
+              </div>
+            </div>
+          </div>
+          <div id="pub-result" class="pub-result">
+          </div>
+          <div class="modal-actions">
+            <button class="btn" onclick="closePublish()">cancelar</button>
+            <button class="btn" onclick="showManualFallback()">[ manual ]</button>
+            <button class="btn btn-primary" id="pub-auto-btn" onclick="publishToGitHub()">[ subir para o github ]</button>
+          </div>
+        </div>
+        <div id="pub-no-token">
+          <div class="modal-body mb-16">
+            Token do GitHub não configurado. Baixe o arquivo e salve manualmente no repositório, ou configure o token em
+            <strong class="text-lilac">Config → GitHub</strong>
+            para publicação automática.
+          </div>
+          <div class="flex-row--between">
+            <span class="label-inline">// data/content.json</span>
+            <button class="btn btn-sm btn-primary" onclick="copyPublishJSON()">[ copiar ]</button>
+          </div>
+          <textarea class="export-area" id="publish-json" readonly>
+          </textarea>
+          <div class="modal-actions modal-actions--mt">
+            <button class="btn" onclick="closePublish()">fechar</button>
+            <button class="btn" onclick="showPanel('settings');closePublish();">[ configurar token ]</button>
+            <a id="publish-download" class="btn btn-success" download="content.json">[ baixar arquivo ]</a>
+          </div>
+        </div>
+        <div id="pub-manual-fallback" class="is-hidden">
+          <div class="flex-row--between">
+            <span class="label-inline">// data/content.json</span>
+            <button class="btn btn-sm btn-primary" onclick="copyPublishJSON()">[ copiar ]</button>
+          </div>
+          <textarea class="export-area" id="publish-json-2" readonly>
+          </textarea>
+          <div class="modal-actions modal-actions--mt">
+            <button class="btn" onclick="document.getElementById('pub-manual-fallback').classList.add('is-hidden');document.getElementById('pub-with-token').classList.remove('is-hidden');">← voltar</button>
+            <a id="publish-download-2" class="btn btn-success" download="content.json">[ baixar arquivo ]</a>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <button class="btn btn-primary" onclick="saveMusicSettings()">salvar configurações de som</button>
-</div>
-<div class="site-section-head">// tamanhos de imagem — referência</div>
-<div class="section-card">
-  <p style="font-family:var(--vt);font-size:0.82rem;color:var(--dim);letter-spacing:0.08em;line-height:2.2;margin-bottom:12px;">// guia de resolução para manter o site uniforme</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-    <div style="border:1px solid var(--lavender);padding:12px;background:var(--bg2);">
-      <div style="font-family:var(--vt);font-size:0.85rem;color:var(--lilac);letter-spacing:0.1em;margin-bottom:4px;">CAPA DE POST</div>
-      <div style="font-family:var(--hand);font-size:1.2rem;color:var(--text);">1200 × 630px</div>
-      <div style="font-family:var(--vt);font-size:0.72rem;color:var(--dim);">16:9 · PNG/JPG · max 5MB</div>
+    <div id="toast">
     </div>
-    <div style="border:1px solid var(--lavender);padding:12px;background:var(--bg2);">
-      <div style="font-family:var(--vt);font-size:0.85rem;color:var(--lilac);letter-spacing:0.1em;margin-bottom:4px;">CAPA DE PROJETO</div>
-      <div style="font-family:var(--hand);font-size:1.2rem;color:var(--text);">800 × 450px</div>
-      <div style="font-family:var(--vt);font-size:0.72rem;color:var(--dim);">16:9 · PNG/JPG · max 5MB</div>
-    </div>
-    <div style="border:1px solid var(--lavender);padding:12px;background:var(--bg2);">
-      <div style="font-family:var(--vt);font-size:0.85rem;color:var(--lilac);letter-spacing:0.1em;margin-bottom:4px;">FOTO DO SOBRE</div>
-      <div style="font-family:var(--hand);font-size:1.2rem;color:var(--text);">400 × 400px</div>
-      <div style="font-family:var(--vt);font-size:0.72rem;color:var(--dim);">1:1 quadrado · PNG/JPG · max 2MB</div>
-    </div>
-    <div style="border:1px solid var(--lavender);padding:12px;background:var(--bg2);">
-      <div style="font-family:var(--vt);font-size:0.85rem;color:var(--lilac);letter-spacing:0.1em;margin-bottom:4px;">OG IMAGE (SEO)</div>
-      <div style="font-family:var(--hand);font-size:1.2rem;color:var(--text);">1200 × 630px</div>
-      <div style="font-family:var(--vt);font-size:0.72rem;color:var(--dim);">para redes sociais · PNG</div>
-    </div>
-    <div style="border:1px solid var(--lavender);padding:12px;background:var(--bg2);">
-      <div style="font-family:var(--vt);font-size:0.85rem;color:var(--lilac);letter-spacing:0.1em;margin-bottom:4px;">FAVICON</div>
-      <div style="font-family:var(--hand);font-size:1.2rem;color:var(--text);">32 × 32px</div>
-      <div style="font-family:var(--vt);font-size:0.72rem;color:var(--dim);">ICO ou PNG · 16/32/48px</div>
-    </div>
-    <div style="border:1px solid var(--lavender);padding:12px;background:var(--bg2);">
-      <div style="font-family:var(--vt);font-size:0.85rem;color:var(--lilac);letter-spacing:0.1em;margin-bottom:4px;">INLINE (BLOG)</div>
-      <div style="font-family:var(--hand);font-size:1.2rem;color:var(--text);">800px largura</div>
-      <div style="font-family:var(--vt);font-size:0.72rem;color:var(--dim);">qualquer altura · PNG/JPG · max 3MB</div>
-    </div>
-  </div>
-  <div style="margin-top:12px;font-family:var(--vt);font-size:0.72rem;color:var(--dim);letter-spacing:0.08em;line-height:2;">// dica: use o site <a href="https://squoosh.app" target="_blank" style="color:var(--lilac);">squoosh.app</a> para redimensionar e comprar imagens gratuitamente sem sair do browser</div>
-</div>
-<div class="site-section-head">// github — publicação automática</div><div class="section-card"><p style="font-family:var(--vt);font-size:0.82rem;color:var(--dim);letter-spacing:0.08em;line-height:2.2;margin-bottom:20px;">Configure uma vez. O botão <span style="color:var(--lilac);">[ PUBLISH ]</span> vai subir o conteúdo direto para o repositório via API do GitHub — sem precisar abrir terminal.<br>O token é salvo localmente no seu navegador, criptografado. Troque a cada 90 dias.</p><div class="form-row"><div class="form-group"><label class="form-label">usuário do github <span>*</span></label><input class="form-input" type="text" id="cfg-gh-user" placeholder="bydan" autocomplete="off"><div class="form-hint">seu @ no github, sem o arroba</div></div><div class="form-group"><label class="form-label">nome do repositório <span>*</span></label><input class="form-input" type="text" id="cfg-gh-repo" placeholder="bydan" autocomplete="off"><div class="form-hint">nome exato do repositório</div></div></div><div class="form-row"><div class="form-group"><label class="form-label">branch</label><input class="form-input" type="text" id="cfg-gh-branch" placeholder="main" autocomplete="off"><div class="form-hint">branch principal (geralmente main ou master)</div></div><div class="form-group"><label class="form-label">caminho do arquivo</label><input class="form-input" type="text" id="cfg-gh-path" placeholder="data/content.json" autocomplete="off"><div class="form-hint">não mude a menos que tenha movido o arquivo</div></div></div><div class="form-group"><label class="form-label">personal access token (PAT) <span>*</span></label><div style="display:flex;gap:8px;align-items:center;"><input class="form-input" type="password" id="cfg-gh-token" placeholder="github_pat_••••••••••••••••••••" autocomplete="off" style="flex:1;"><button class="btn btn-sm" onclick="toggleTokenVisibility()" id="token-vis-btn" style="white-space:nowrap;">[ mostrar ]</button></div><div class="form-hint" style="margin-top:6px;">Crie em: <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--lilac);">github.com/settings/tokens</a> →<span style="color:var(--lilac);">Fine-grained</span> → selecione seu repositório → permissão <span style="color:var(--lilac);">Contents: Read & Write</span></div></div><div id="gh-status-bar" style="display:none;font-family:var(--vt);font-size:0.8rem;padding:8px 12px;border:1px solid var(--lavender);margin-bottom:16px;letter-spacing:0.08em;"></div><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"><button class="btn btn-primary" onclick="saveGithubConfig()">salvar configuração</button><button class="btn" onclick="testGithubConnection()">[ testar conexão ]</button><span id="gh-saved-indicator" style="font-family:var(--vt);font-size:0.78rem;color:var(--green);letter-spacing:0.1em;display:none;">✓ configurado</span></div><div style="margin-top:16px;padding-top:16px;border-top:1px dashed var(--lavender);"><p style="font-family:var(--vt);font-size:0.75rem;color:var(--dim);letter-spacing:0.08em;line-height:2;">⚠ tokens do GitHub expiram após 90 dias se configurado assim. Quando isso acontecer, volte aqui e cole o novo token.<br>⚠ nunca compartilhe o token. ele tem permissão de escrita no seu repositório.</p></div></div><div class="site-section-head">// dados & exportação</div><div class="section-card"><p style="font-family:var(--vt);font-size:0.82rem;color:var(--dim);letter-spacing:0.08em;margin-bottom:16px;">Exporta o conteúdo atual como JSON para salvar manualmente no repositório, ou importa um JSON existente.</p><div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-primary" onclick="exportJSON()">exportar content.json</button><button class="btn" onclick="importJSON()">importar content.json</button><button class="btn btn-danger" onclick="clearLocalData()">limpar dados locais</button></div><input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(this)"></div><div class="site-section-head">// sobre o sistema</div><div class="section-card" style="font-family:var(--vt);font-size:0.82rem;color:var(--dim);letter-spacing:0.08em;line-height:2.2;"><p>bydan cms · versão 1.1</p><p>hospedagem: github pages · bydan.com.br</p><p>dados: localStorage + content.json</p><p style="margin-top:12px;">fluxo com token configurado:</p><p style="color:var(--lilac);">editar → PUBLISH → [ subir para o github ] → deploy automático em ~1min</p><p style="margin-top:8px;">fluxo manual (sem token):</p><p style="color:var(--dim);">editar → PUBLISH → baixar JSON → substituir no github → commit</p></div></div></div></div><div id="publish-modal"><div class="modal-box" style="max-width:560px;"><div class="modal-title">Publicar Alterações</div><div id="pub-with-token" style="display:none;"><div style="font-family:var(--vt);font-size:0.82rem;color:var(--dim);letter-spacing:0.08em;line-height:2.2;margin-bottom:20px;">Repositório: <span id="pub-repo-display" style="color:var(--lilac);"></span><br>Arquivo: <span style="color:var(--muted);">data/content.json</span><br>Branch: <span id="pub-branch-display" style="color:var(--muted);"></span></div><div id="pub-progress" style="display:none;margin-bottom:16px;"><div style="font-family:var(--vt);font-size:0.85rem;color:var(--dim);letter-spacing:0.1em;margin-bottom:8px;" id="pub-progress-text">// preparando...</div><div style="background:var(--bg2);border:1px solid var(--lavender);height:6px;"><div id="pub-progress-bar" style="background:var(--lilac);height:100%;width:0%;transition:width 0.4s;"></div></div></div><div id="pub-result" style="display:none;font-family:var(--vt);font-size:0.85rem;padding:12px;border:1px solid;letter-spacing:0.08em;margin-bottom:16px;"></div><div class="modal-actions"><button class="btn" onclick="closePublish()">cancelar</button><button class="btn" onclick="showManualFallback()">[ manual ]</button><button class="btn btn-primary" id="pub-auto-btn" onclick="publishToGitHub()">[ subir para o github ]</button></div></div><div id="pub-no-token"><div class="modal-body" style="margin-bottom:16px;">Token do GitHub não configurado. Baixe o arquivo e salve manualmente no repositório, ou configure o token em <strong style="color:var(--lilac);">Config → GitHub</strong> para publicação automática.</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.1em;">// data/content.json</span><button class="btn btn-sm btn-primary" onclick="copyPublishJSON()">[ copiar ]</button></div><textarea class="export-area" id="publish-json" readonly></textarea><div class="modal-actions" style="margin-top:16px;"><button class="btn" onclick="closePublish()">fechar</button><button class="btn" onclick="showPanel('settings');closePublish();">[ configurar token ]</button><a id="publish-download" class="btn btn-success" download="content.json">[ baixar arquivo ]</a></div></div><div id="pub-manual-fallback" style="display:none;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.1em;">// data/content.json</span><button class="btn btn-sm btn-primary" onclick="copyPublishJSON()">[ copiar ]</button></div><textarea class="export-area" id="publish-json-2" readonly></textarea><div class="modal-actions" style="margin-top:16px;"><button class="btn" onclick="document.getElementById('pub-manual-fallback').style.display='none';document.getElementById('pub-with-token').style.display='block';">← voltar</button><a id="publish-download-2" class="btn btn-success" download="content.json">[ baixar arquivo ]</a></div></div></div></div><div id="toast"></div><script>/* ══════════════════════════════════════════════════════AUTH══════════════════════════════════════════════════════ */const SALT='SALT-SECRETO-DAN_';const DEFAULT_PASS_HASH='2e57d9dd283568797667585af71e65a5827a2b01de02b51691826fad43344c75';let loginAttempts=0;const MAX_ATTEMPTS = 5;let lockedUntil = 0;async function sha256(msg) {const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');}async function doLogin() {const now = Date.now();if (now < lockedUntil) {const secs = Math.ceil((lockedUntil - now) / 1000);showLoginErr(`bloqueado. aguarde ${secs}s.`);return;}const pass = document.getElementById('login-pass').value;if (!pass) return;const hash = await sha256(SALT + pass);const stored = localStorage.getItem('bydan_pass_hash') || DEFAULT_PASS_HASH;if (hash === stored) {loginAttempts = 0;localStorage.setItem('bydan_session', Date.now().toString());document.getElementById('login-screen').style.display = 'none';document.getElementById('admin-app').classList.add('visible');initAdmin();} else {loginAttempts++;document.getElementById('login-err').style.display = 'block';if (loginAttempts >= MAX_ATTEMPTS) {lockedUntil = Date.now() + 60000;showLoginErr(`muitas tentativas. aguarde 60s.`);} else {document.getElementById('login-attempts').textContent = `tentativa ${loginAttempts}/${MAX_ATTEMPTS}`;}}}function showLoginErr(msg) {const el = document.getElementById('login-err');el.textContent = msg; el.style.display = 'block';}function doLogout() {localStorage.removeItem('bydan_session');location.reload();}function checkSession() {const s = localStorage.getItem('bydan_session');if (s && Date.now() - parseInt(s) < 8 * 3600000) {document.getElementById('login-screen').style.display = 'none';document.getElementById('admin-app').classList.add('visible');initAdmin();}}document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });checkSession();/* ══════════════════════════════════════════════════════DATA══════════════════════════════════════════════════════ */let DATA = null;let activity = JSON.parse(localStorage.getItem('bydan_activity') || '[]');async function loadData() {
+    <script>/* ══════════════════════════════════════════════════════AUTH══════════════════════════════════════════════════════ */const SALT='SALT-SECRETO-DAN_';const DEFAULT_PASS_HASH='297ba64bfa1f3c64033b9722fc010f5a90314d1f5443bdc2aeea0dcb8419d9ff';let loginAttempts=0;const MAX_ATTEMPTS = 5;let lockedUntil = 0;async function sha256(msg) {const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');}async function hashPassword(pass) { return sha256(SALT + pass); }async function verifyPassword(pass) {const stored = localStorage.getItem('bydan_pass_hash') || DEFAULT_PASS_HASH;const hash = await hashPassword(pass);if (hash === stored) return true;const legacy = await sha256(pass);if (legacy === stored) { localStorage.setItem('bydan_pass_hash', hash); return true; }return false;}async function doLogin() {const now = Date.now();if (now < lockedUntil) {const secs = Math.ceil((lockedUntil - now) / 1000);showLoginErr(`bloqueado. aguarde ${secs}s.`);return;}const pass = document.getElementById('login-pass').value;if (!pass) return;if (await verifyPassword(pass)) {loginAttempts = 0;localStorage.setItem('bydan_session', Date.now().toString());document.getElementById('login-screen').classList.add('is-hidden');document.getElementById('admin-app').classList.add('visible');initAdmin();} else {loginAttempts++;document.getElementById('login-err').classList.add('is-visible');if (loginAttempts >= MAX_ATTEMPTS) {lockedUntil = Date.now() + 60000;showLoginErr(`muitas tentativas. aguarde 60s.`);} else {document.getElementById('login-attempts').textContent = `tentativa ${loginAttempts}/${MAX_ATTEMPTS}`;}}}function showLoginErr(msg) {const el = document.getElementById('login-err');el.textContent = msg; el.classList.add('is-visible');}function doLogout() {localStorage.removeItem('bydan_session');location.reload();}function checkSession() {const s = localStorage.getItem('bydan_session');if (s && Date.now() - parseInt(s) < 8 * 3600000) {document.getElementById('login-screen').classList.add('is-hidden');document.getElementById('admin-app').classList.add('visible');initAdmin();}}document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });checkSession();/* ══════════════════════════════════════════════════════DATA══════════════════════════════════════════════════════ */let DATA = null;let activity = JSON.parse(localStorage.getItem('bydan_activity') || '[]');async function loadData() {
   /* Sempre busca o content.json do servidor primeiro */
   try {
     const r = await fetch('../data/content.json?' + Date.now());
@@ -156,13 +730,13 @@
   DATA = getDefaultData();
 }function saveData() {localStorage.setItem('bydan_content', JSON.stringify(DATA));}function getDefaultData() {return { meta:{siteTitle:'bydan',siteSub:'arquivo pessoal · em deriva',siteSym:'✦ ◌ ✦ ◌ ✦',marquee:'✦ bydan.com.br',footerSym:'✦ ◌ ✦ ◌ ✦',footerInfo:'bydan.com.br · 2026',wanderText:'✦ bydan.com.br · arquivo pessoal · em deriva · ✦',badges:['bydan.com.br'],typewriterMsg:'Um espaço esquecido.'}, sobre:{avatar:'D',paragraphs:['Olá, eu sou Dan.'],handnote:'faço coisas que não deveriam existir.'}, filosofia:{quote:'',paragraphs:[]}, contato:{note:'',links:[]}, stack:[], novidades:[], posts:[], projetos:[] };}function logActivity(msg) {const now = new Date();const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${now.toLocaleDateString('pt-BR')}`;activity.unshift({ time, text: msg });if (activity.length > 20) activity.pop();localStorage.setItem('bydan_activity', JSON.stringify(activity));}/* ══════════════════════════════════════════════════════INIT══════════════════════════════════════════════════════ */let darkAdmin = localStorage.getItem('bydan_admin_dark') === '1';if (darkAdmin) document.body.classList.add('dark');function toggleDark() {darkAdmin = !darkAdmin;document.body.classList.toggle('dark', darkAdmin);localStorage.setItem('bydan_admin_dark', darkAdmin ? '1' : '0');}async function initAdmin() {await loadData();renderDashboard();renderBlogList();renderProjList();populateSiteEditor();populateGithubConfig();}/* ══════════════════════════════════════════════════════PANELS══════════════════════════════════════════════════════ */function showPanel(id) {document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('on'));document.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('on'));document.getElementById('panel-' + id).classList.add('on');document.getElementById('tb-' + id).classList.add('on');}/* ══════════════════════════════════════════════════════DASHBOARD══════════════════════════════════════════════════════ */function renderDashboard() {const posts = DATA.posts || [];const projs = DATA.projetos || [];const published = posts.filter(p => p.status === 'published').length;const drafts = posts.filter(p => p.status === 'draft').length;const scheduled = posts.filter(p => p.scheduledAt).length;const stats = [{ num: posts.length, label: 'posts total' },{ num: published, label: 'publicados' },{ num: drafts, label: 'rascunhos' },{ num: projs.filter(p => p.status === 'published').length, label: 'projetos' },];document.getElementById('dash-stats').innerHTML = stats.map(s =>`<div class="stat-card"><span class="stat-num">${s.num}</span><span class="stat-label">${s.label}</span></div>`).join('');const act = activity.length ? activity.slice(0, 10).map(a =>`<div class="activity-item"><span class="activity-time">${a.time}</span><span class="activity-text">${a.text}</span></div>`).join('') : '<div class="empty-state">// sem atividade registrada</div>';document.getElementById('dash-activity').innerHTML = act;checkTokenExpiry();checkScheduledPosts();}function checkTokenExpiry() {const saved = localStorage.getItem('bydan_gh_token_saved_at');if (!saved || !localStorage.getItem('bydan_gh_token')) return;const days = (Date.now() - parseInt(saved)) / 86400000;const warn = document.getElementById('token-warning');if (days > 75) { 
 /* warn 2 weeks before 90 day expiry */
-warn.style.display = 'block';const remaining = Math.max(0, Math.round(90 - days));warn.querySelector('span') && (warn.innerHTML = warn.innerHTML); 
+warn.classList.add('is-visible');const remaining = Math.max(0, Math.round(90 - days));warn.querySelector('span') && (warn.innerHTML = warn.innerHTML); 
 /* keep */
-warn.firstChild.textContent = `⚠ token do github expira em ~${remaining} dia${remaining!==1?'s':''}. `;}}function checkScheduledPosts() {if (!DATA.posts) return;let changed = false;DATA.posts.forEach(p => {if (p.scheduledAt && p.status === 'draft') {if (new Date(p.scheduledAt) <= new Date()) {p.status = 'published';p.scheduledAt = null;changed = true;logActivity(`publicou automaticamente: "${p.title}"`);}}});if (changed) { saveData(); renderBlogList(); }}/* ══════════════════════════════════════════════════════BLOG LIST══════════════════════════════════════════════════════ */function renderBlogList() {const posts = DATA.posts || [];const el = document.getElementById('blog-list');if (!posts.length) { el.innerHTML = '<div class="empty-state">// nenhum post ainda. clique em "novo post" para começar.</div>'; return; }el.innerHTML = '<div class="item-list" id="sortable-posts">' + posts.map((p,i) => `<div class="item-row" draggable="true" data-id="${p.id}" data-idx="${i}"ondragstart="dragStart(event)" ondragover="dragOver2(event)" ondrop="dropReorder(event,'posts')"><span style="color:var(--dim);font-family:var(--vt);font-size:1rem;cursor:grab;padding:0 4px;" title="arrastar para reordenar">⠿</span><div class="item-title">${esc(p.title)}</div><div class="item-date">${esc(p.date)}</div>${p.scheduledAt ? `<div class="item-status" style="color:var(--blue);border-color:var(--blue);">agendado</div>` :`<div class="item-status status-${p.status}">${p.status === 'published' ? 'publicado' : 'rascunho'}</div>`}<div class="item-actions"><button class="btn btn-sm" onclick="editPost('${p.id}')">editar</button><button class="btn btn-sm" onclick="duplicatePost('${p.id}')">duplicar</button><button class="btn btn-sm btn-danger" onclick="deletePost('${p.id}')">excluir</button></div></div>`).join('') + '</div>';}function updatePostSlug(title) {const slug = slugify(title);const el = document.getElementById('post-slug');if (el && !el.dataset.manual) el.value = slug;}function removeCover() {document.getElementById('post-cover-data').value = '';document.getElementById('cover-preview').style.display = 'none';document.getElementById('cover-remove-btn').style.display = 'none';document.getElementById('cover-upload-text').textContent = '[ clique ou arraste uma imagem ]';}function duplicatePost(id) {const p = (DATA.posts||[]).find(x=>x.id===id);if (!p) return;const copy = { ...p, id:'post-'+Date.now(), title: p.title+' (cópia)', status:'draft', slug: p.slug+'-copia', date:'', dateISO:'' };DATA.posts.unshift(copy);saveData();logActivity(`duplicou post: "${p.title}"`);toast('post duplicado como rascunho!');renderBlogList(); renderDashboard();}/* ── DRAG REORDER ── */let dragSrcId = null;function dragStart(e) { dragSrcId = e.currentTarget.dataset.id; e.currentTarget.style.opacity='0.5'; }function dragOver2(e) { e.preventDefault(); }function dropReorder(e, type) {e.preventDefault();const targetId = e.currentTarget.dataset.id;if (!dragSrcId || dragSrcId === targetId) { resetDragStyles(); return; }if (type === 'posts') {const arr = DATA.posts;const from = arr.findIndex(p=>p.id===dragSrcId);const to = arr.findIndex(p=>p.id===targetId);arr.splice(to,0,arr.splice(from,1)[0]);saveData(); logActivity('reordenou posts'); renderBlogList();} else {const arr = DATA.projetos;const from = arr.findIndex(p=>p.id===dragSrcId);const to = arr.findIndex(p=>p.id===targetId);arr.splice(to,0,arr.splice(from,1)[0]);saveData(); logActivity('reordenou projetos'); renderProjList();}resetDragStyles();}function resetDragStyles() {document.querySelectorAll('.item-row').forEach(r=>r.style.opacity='');dragSrcId = null;}/* ── FULL PREVIEW ── */function closeFullPreview() {document.getElementById('full-preview-modal').style.display = 'none';}/* ══════════════════════════════════════════════════════POST EDITOR══════════════════════════════════════════════════════ */let postTags = [];let postAttachments = [];let currentEditorTab = 'write';function openPostEditor(id) {postTags = []; postAttachments = [];document.getElementById('post-editing-id').value = '';document.getElementById('post-title').value = '';document.getElementById('post-slug').value = '';document.getElementById('post-slug').dataset.manual = '';document.getElementById('post-date').value = new Date().toISOString().split('T')[0];document.getElementById('post-schedule').value = '';document.getElementById('post-excerpt').value = '';document.getElementById('post-content-editor').innerHTML = '';document.getElementById('post-status').value = 'draft';document.getElementById('cover-preview').style.display = 'none';document.getElementById('cover-remove-btn').style.display = 'none';document.getElementById('post-cover-data').value = '';document.getElementById('cover-upload-text').textContent = '[ clique ou arraste uma imagem ]';document.getElementById('post-editor-title').textContent = 'Novo Post';renderTagChips('post-tags', postTags);renderAttachList();document.getElementById('blog-list').style.display = 'none';document.getElementById('post-editor').style.display = 'block';document.getElementById('post-editor').scrollIntoView({ behavior: 'smooth' });}function editPost(id) {const p = (DATA.posts || []).find(x => x.id === id);if (!p) return;postTags = [...(p.tags || [])];postAttachments = [...(p.attachments || [])];document.getElementById('post-editing-id').value = p.id;document.getElementById('post-title').value = p.title || '';document.getElementById('post-slug').value = p.slug || '';document.getElementById('post-slug').dataset.manual = p.slug ? '1' : '';document.getElementById('post-date').value = p.dateISO || '';document.getElementById('post-schedule').value = p.scheduledAt || '';document.getElementById('post-excerpt').value = p.excerpt || '';document.getElementById('post-content-editor').innerHTML = p.content || '';document.getElementById('post-status').value = p.status || 'draft';document.getElementById('post-editor-title').textContent = 'Editar Post';if (p.coverImage) {document.getElementById('cover-preview').src = p.coverImage;document.getElementById('cover-preview').style.display = 'block';document.getElementById('cover-remove-btn').style.display = 'inline-block';document.getElementById('post-cover-data').value = p.coverImage;document.getElementById('cover-upload-text').textContent = '[ imagem selecionada — clique para trocar ]';} else {document.getElementById('cover-preview').style.display = 'none';document.getElementById('cover-remove-btn').style.display = 'none';document.getElementById('post-cover-data').value = '';document.getElementById('cover-upload-text').textContent = '[ clique ou arraste uma imagem ]';}renderTagChips('post-tags', postTags);renderAttachList();document.getElementById('blog-list').style.display = 'none';document.getElementById('post-editor').style.display = 'block';}function closePostEditor() {document.getElementById('post-editor').style.display = 'none';document.getElementById('blog-list').style.display = 'block';}function savePost(statusOverride) {const title = document.getElementById('post-title').value.trim();if (!title) { toast('título obrigatório', true); return; }const editingId = document.getElementById('post-editing-id').value;const dateISO = document.getElementById('post-date').value;const dateParts = dateISO ? dateISO.split('-') : [];const dateDisplay = dateParts.length === 3 ? `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}` : '';const scheduledAt = document.getElementById('post-schedule').value || null;let status = statusOverride || document.getElementById('post-status').value;
+warn.firstChild.textContent = `⚠ token do github expira em ~${remaining} dia${remaining!==1?'s':''}. `;}}function checkScheduledPosts() {if (!DATA.posts) return;let changed = false;DATA.posts.forEach(p => {if (p.scheduledAt && p.status === 'draft') {if (new Date(p.scheduledAt) <= new Date()) {p.status = 'published';p.scheduledAt = null;changed = true;logActivity(`publicou automaticamente: "${p.title}"`);}}});if (changed) { saveData(); renderBlogList(); }}/* ══════════════════════════════════════════════════════BLOG LIST══════════════════════════════════════════════════════ */function renderBlogList() {const posts = DATA.posts || [];const el = document.getElementById('blog-list');if (!posts.length) { el.innerHTML = '<div class="empty-state">// nenhum post ainda. clique em "novo post" para começar.</div>'; return; }el.innerHTML = '<div class="item-list" id="sortable-posts">' + posts.map((p,i) => `<div class="item-row" draggable="true" data-id="${p.id}" data-idx="${i}"ondragstart="dragStart(event)" ondragover="dragOver2(event)" ondrop="dropReorder(event,'posts')"><span style="color:var(--dim);font-family:var(--vt);font-size:1rem;cursor:grab;padding:0 4px;" title="arrastar para reordenar">⠿</span><div class="item-title">${esc(p.title)}</div><div class="item-date">${esc(p.date)}</div>${p.scheduledAt ? `<div class="item-status" style="color:var(--blue);border-color:var(--blue);">agendado</div>` :`<div class="item-status status-${p.status}">${p.status === 'published' ? 'publicado' : 'rascunho'}</div>`}<div class="item-actions"><button class="btn btn-sm" onclick="editPost('${p.id}')">editar</button><button class="btn btn-sm" onclick="duplicatePost('${p.id}')">duplicar</button><button class="btn btn-sm btn-danger" onclick="deletePost('${p.id}')">excluir</button></div></div>`).join('') + '</div>';}function updatePostSlug(title) {const slug = slugify(title);const el = document.getElementById('post-slug');if (el && !el.dataset.manual) el.value = slug;}function removeCover() {document.getElementById('post-cover-data').value = '';document.getElementById('cover-preview').classList.remove('is-visible');document.getElementById('cover-remove-btn').classList.remove('is-visible');document.getElementById('cover-upload-text').textContent = '[ clique ou arraste uma imagem ]';}function duplicatePost(id) {const p = (DATA.posts||[]).find(x=>x.id===id);if (!p) return;const copy = { ...p, id:'post-'+Date.now(), title: p.title+' (cópia)', status:'draft', slug: p.slug+'-copia', date:'', dateISO:'' };DATA.posts.unshift(copy);saveData();logActivity(`duplicou post: "${p.title}"`);toast('post duplicado como rascunho!');renderBlogList(); renderDashboard();}/* ── DRAG REORDER ── */let dragSrcId = null;function dragStart(e) { dragSrcId = e.currentTarget.dataset.id; e.currentTarget.style.opacity='0.5'; }function dragOver2(e) { e.preventDefault(); }function dropReorder(e, type) {e.preventDefault();const targetId = e.currentTarget.dataset.id;if (!dragSrcId || dragSrcId === targetId) { resetDragStyles(); return; }if (type === 'posts') {const arr = DATA.posts;const from = arr.findIndex(p=>p.id===dragSrcId);const to = arr.findIndex(p=>p.id===targetId);arr.splice(to,0,arr.splice(from,1)[0]);saveData(); logActivity('reordenou posts'); renderBlogList();} else {const arr = DATA.projetos;const from = arr.findIndex(p=>p.id===dragSrcId);const to = arr.findIndex(p=>p.id===targetId);arr.splice(to,0,arr.splice(from,1)[0]);saveData(); logActivity('reordenou projetos'); renderProjList();}resetDragStyles();}function resetDragStyles() {document.querySelectorAll('.item-row').forEach(r=>r.style.opacity='');dragSrcId = null;}/* ── FULL PREVIEW ── */function closeFullPreview() {document.getElementById('full-preview-modal').classList.remove('is-visible');}/* ══════════════════════════════════════════════════════POST EDITOR══════════════════════════════════════════════════════ */let postTags = [];let postAttachments = [];let currentEditorTab = 'write';function openPostEditor(id) {postTags = []; postAttachments = [];document.getElementById('post-editing-id').value = '';document.getElementById('post-title').value = '';document.getElementById('post-slug').value = '';document.getElementById('post-slug').dataset.manual = '';document.getElementById('post-date').value = new Date().toISOString().split('T')[0];document.getElementById('post-schedule').value = '';document.getElementById('post-excerpt').value = '';document.getElementById('post-content-editor').innerHTML = '';document.getElementById('post-status').value = 'draft';document.getElementById('cover-preview').classList.remove('is-visible');document.getElementById('cover-remove-btn').classList.remove('is-visible');document.getElementById('post-cover-data').value = '';document.getElementById('cover-upload-text').textContent = '[ clique ou arraste uma imagem ]';document.getElementById('post-editor-title').textContent = 'Novo Post';renderTagChips('post-tags', postTags);renderAttachList();document.getElementById('blog-list').classList.add('is-hidden');document.getElementById('post-editor').classList.remove('is-hidden');document.getElementById('post-editor').scrollIntoView({ behavior: 'smooth' });}function editPost(id) {const p = (DATA.posts || []).find(x => x.id === id);if (!p) return;postTags = [...(p.tags || [])];postAttachments = [...(p.attachments || [])];document.getElementById('post-editing-id').value = p.id;document.getElementById('post-title').value = p.title || '';document.getElementById('post-slug').value = p.slug || '';document.getElementById('post-slug').dataset.manual = p.slug ? '1' : '';document.getElementById('post-date').value = p.dateISO || '';document.getElementById('post-schedule').value = p.scheduledAt || '';document.getElementById('post-excerpt').value = p.excerpt || '';document.getElementById('post-content-editor').innerHTML = p.content || '';document.getElementById('post-status').value = p.status || 'draft';document.getElementById('post-editor-title').textContent = 'Editar Post';if (p.coverImage) {document.getElementById('cover-preview').src = p.coverImage;document.getElementById('cover-preview').classList.add('is-visible');document.getElementById('cover-remove-btn').classList.add('is-visible');document.getElementById('post-cover-data').value = p.coverImage;document.getElementById('cover-upload-text').textContent = '[ imagem selecionada — clique para trocar ]';} else {document.getElementById('cover-preview').classList.remove('is-visible');document.getElementById('cover-remove-btn').classList.remove('is-visible');document.getElementById('post-cover-data').value = '';document.getElementById('cover-upload-text').textContent = '[ clique ou arraste uma imagem ]';}renderTagChips('post-tags', postTags);renderAttachList();document.getElementById('blog-list').classList.add('is-hidden');document.getElementById('post-editor').classList.remove('is-hidden');}function closePostEditor() {document.getElementById('post-editor').classList.add('is-hidden');document.getElementById('blog-list').classList.remove('is-hidden');}function savePost(statusOverride) {const title = document.getElementById('post-title').value.trim();if (!title) { toast('título obrigatório', true); return; }const editingId = document.getElementById('post-editing-id').value;const dateISO = document.getElementById('post-date').value;const dateParts = dateISO ? dateISO.split('-') : [];const dateDisplay = dateParts.length === 3 ? `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}` : '';const scheduledAt = document.getElementById('post-schedule').value || null;let status = statusOverride || document.getElementById('post-status').value;
 /* If scheduled and not yet due, keep as draft */
-if (scheduledAt && new Date(scheduledAt) > new Date()) status = 'draft';const post = {id: editingId || 'post-' + Date.now(),slug: document.getElementById('post-slug').value.trim() || slugify(title),title, date: dateDisplay, dateISO,excerpt: document.getElementById('post-excerpt').value.trim(),content: document.getElementById('post-content-editor').innerHTML,tags: [...postTags],coverImage: document.getElementById('post-cover-data').value,coverAlt: title,attachments: [...postAttachments],status, scheduledAt,featured: !editingId};if (!DATA.posts) DATA.posts = [];if (editingId) {const idx = DATA.posts.findIndex(p => p.id === editingId);if (idx > -1) DATA.posts[idx] = post; else DATA.posts.unshift(post);} else { DATA.posts.unshift(post); }saveData();const msg = scheduledAt && new Date(scheduledAt) > new Date()? `agendado para ${new Date(scheduledAt).toLocaleString('pt-BR')}`: status === 'published' ? 'post publicado!' : 'rascunho salvo!';logActivity(`${status==='published'?'publicou':'salvou rascunho de'} post: "${title}"`);toast(msg);closePostEditor();renderBlogList();renderDashboard();}function deletePost(id) {const p = (DATA.posts || []).find(x => x.id === id);if (!p) return;if (!confirm(`Excluir "${p.title}"?`)) return;DATA.posts = DATA.posts.filter(x => x.id !== id);saveData();logActivity(`excluiu post: "${p.title}"`);toast('post excluído');renderBlogList();renderDashboard();}/* ══════════════════════════════════════════════════════EDITOR TOOLS══════════════════════════════════════════════════════ */function edCmd(cmd) {document.getElementById('post-content-editor').focus();document.execCommand(cmd, false, null);}function edInsert(type) {const editor = document.getElementById('post-content-editor');editor.focus();const tags = {h2: '<h2>Título</h2>',h3: '<h3>Subtítulo</h3>',p: '<p>Parágrafo...</p>',bq: '<blockquote>Citação...</blockquote>',hr: '<hr>',ul: '<ul><li>Item 1</li><li>Item 2</li></ul>',code: '<pre style="background:var(--bg2);border:1px solid var(--lavender);padding:12px;font-family:monospace;font-size:0.8rem;overflow-x:auto;margin:8px 0;">// código aqui</pre>'};document.execCommand('insertHTML', false, tags[type] || '');}function insertLink() {const url = prompt('URL do link:');if (url) { document.getElementById('post-content-editor').focus(); document.execCommand('createLink', false, url); }}function insertImageEmbed() {const url = prompt('URL da imagem:');if (url) { document.getElementById('post-content-editor').focus(); document.execCommand('insertHTML', false, `<img src="${url}" alt="imagem" style="max-width:100%;border:1px solid var(--lavender);margin:8px 0;">`); }}function insertVideoEmbed() {const url = prompt('URL do vídeo (YouTube, Vimeo ou MP4 direto):');if (!url) return;let html = '';if (url.includes('youtube.com/watch')) {const id = new URL(url).searchParams.get('v');html = `<div style="position:relative;padding-bottom:56.25%;height:0;margin:12px 0;"><iframe src="https://www.youtube.com/embed/${id}" style="position:absolute;inset:0;width:100%;height:100%;border:1px solid var(--lavender);" allowfullscreen></iframe></div>`;} else if (url.includes('youtu.be/')) {const id = url.split('youtu.be/')[1];html = `<div style="position:relative;padding-bottom:56.25%;height:0;margin:12px 0;"><iframe src="https://www.youtube.com/embed/${id}" style="position:absolute;inset:0;width:100%;height:100%;border:1px solid var(--lavender);" allowfullscreen></iframe></div>`;} else if (url.includes('vimeo.com/')) {const id = url.split('vimeo.com/')[1];html = `<div style="position:relative;padding-bottom:56.25%;height:0;margin:12px 0;"><iframe src="https://player.vimeo.com/video/${id}" style="position:absolute;inset:0;width:100%;height:100%;border:1px solid var(--lavender);" allowfullscreen></iframe></div>`;} else {html = `<video controls style="max-width:100%;border:1px solid var(--lavender);margin:8px 0;"><source src="${url}"><a href="${url}">baixar vídeo</a></video>`;}document.getElementById('post-content-editor').focus();document.execCommand('insertHTML', false, html);}function switchEditorTab(tab) {currentEditorTab = tab;document.querySelectorAll('.editor-tab').forEach((el, i) => {el.classList.toggle('on', (i===0&&tab==='write')||(i===1&&tab==='preview')||(i===2&&tab==='fullpreview'));});const editor = document.getElementById('post-content-editor');const preview = document.getElementById('post-content-preview');const toolbar = document.getElementById('editor-toolbar');const fpModal = document.getElementById('full-preview-modal');if (tab === 'write') {editor.style.display='block'; preview.style.display='none'; toolbar.style.display='flex'; fpModal.style.display='none';} else if (tab === 'preview') {editor.style.display='none'; preview.style.display='block'; toolbar.style.display='none'; fpModal.style.display='none';preview.innerHTML = editor.innerHTML || '<em style="color:var(--dim)">nada para pré-visualizar</em>';} else if (tab === 'fullpreview') {editor.style.display='block'; preview.style.display='none'; toolbar.style.display='flex';
+if (scheduledAt && new Date(scheduledAt) > new Date()) status = 'draft';const post = {id: editingId || 'post-' + Date.now(),slug: document.getElementById('post-slug').value.trim() || slugify(title),title, date: dateDisplay, dateISO,excerpt: document.getElementById('post-excerpt').value.trim(),content: document.getElementById('post-content-editor').innerHTML,tags: [...postTags],coverImage: document.getElementById('post-cover-data').value,coverAlt: title,attachments: [...postAttachments],status, scheduledAt,featured: !editingId};if (!DATA.posts) DATA.posts = [];if (editingId) {const idx = DATA.posts.findIndex(p => p.id === editingId);if (idx > -1) DATA.posts[idx] = post; else DATA.posts.unshift(post);} else { DATA.posts.unshift(post); }saveData();const msg = scheduledAt && new Date(scheduledAt) > new Date()? `agendado para ${new Date(scheduledAt).toLocaleString('pt-BR')}`: status === 'published' ? 'post publicado!' : 'rascunho salvo!';logActivity(`${status==='published'?'publicou':'salvou rascunho de'} post: "${title}"`);toast(msg);closePostEditor();renderBlogList();renderDashboard();}function deletePost(id) {const p = (DATA.posts || []).find(x => x.id === id);if (!p) return;if (!confirm(`Excluir "${p.title}"?`)) return;DATA.posts = DATA.posts.filter(x => x.id !== id);saveData();logActivity(`excluiu post: "${p.title}"`);toast('post excluído');renderBlogList();renderDashboard();}/* ══════════════════════════════════════════════════════EDITOR TOOLS══════════════════════════════════════════════════════ */function edCmd(cmd) {document.getElementById('post-content-editor').focus();document.execCommand(cmd, false, null);}function edInsert(type) {const editor = document.getElementById('post-content-editor');editor.focus();const tags = {h2: '<h2>Título</h2>',h3: '<h3>Subtítulo</h3>',p: '<p>Parágrafo...</p>',bq: '<blockquote>Citação...</blockquote>',hr: '<hr>',ul: '<ul><li>Item 1</li><li>Item 2</li></ul>',code: '<pre style="background:var(--bg2);border:1px solid var(--lavender);padding:12px;font-family:monospace;font-size:0.8rem;overflow-x:auto;margin:8px 0;">// código aqui</pre>'};document.execCommand('insertHTML', false, tags[type] || '');}function insertLink() {const url = prompt('URL do link:');if (url) { document.getElementById('post-content-editor').focus(); document.execCommand('createLink', false, url); }}function insertImageEmbed() {const url = prompt('URL da imagem:');if (url) { document.getElementById('post-content-editor').focus(); document.execCommand('insertHTML', false, `<img src="${url}" alt="imagem" style="max-width:100%;border:1px solid var(--lavender);margin:8px 0;">`); }}function insertVideoEmbed() {const url = prompt('URL do vídeo (YouTube, Vimeo ou MP4 direto):');if (!url) return;let html = '';if (url.includes('youtube.com/watch')) {const id = new URL(url).searchParams.get('v');html = `<div style="position:relative;padding-bottom:56.25%;height:0;margin:12px 0;"><iframe src="https://www.youtube.com/embed/${id}" style="position:absolute;inset:0;width:100%;height:100%;border:1px solid var(--lavender);" allowfullscreen></iframe></div>`;} else if (url.includes('youtu.be/')) {const id = url.split('youtu.be/')[1];html = `<div style="position:relative;padding-bottom:56.25%;height:0;margin:12px 0;"><iframe src="https://www.youtube.com/embed/${id}" style="position:absolute;inset:0;width:100%;height:100%;border:1px solid var(--lavender);" allowfullscreen></iframe></div>`;} else if (url.includes('vimeo.com/')) {const id = url.split('vimeo.com/')[1];html = `<div style="position:relative;padding-bottom:56.25%;height:0;margin:12px 0;"><iframe src="https://player.vimeo.com/video/${id}" style="position:absolute;inset:0;width:100%;height:100%;border:1px solid var(--lavender);" allowfullscreen></iframe></div>`;} else {html = `<video controls style="max-width:100%;border:1px solid var(--lavender);margin:8px 0;"><source src="${url}"><a href="${url}">baixar vídeo</a></video>`;}document.getElementById('post-content-editor').focus();document.execCommand('insertHTML', false, html);}function switchEditorTab(tab) {currentEditorTab = tab;document.querySelectorAll('.editor-tab').forEach((el, i) => {el.classList.toggle('on', (i===0&&tab==='write')||(i===1&&tab==='preview')||(i===2&&tab==='fullpreview'));});const editor = document.getElementById('post-content-editor');const preview = document.getElementById('post-content-preview');const toolbar = document.getElementById('editor-toolbar');const fpModal = document.getElementById('full-preview-modal');if (tab === 'write') {editor.classList.remove('is-hidden'); preview.classList.add('is-hidden'); toolbar.classList.remove('is-hidden'); fpModal.style.display='none';} else if (tab === 'preview') {editor.classList.add('is-hidden'); preview.classList.remove('is-hidden'); toolbar.classList.add('is-hidden'); fpModal.style.display='none';preview.innerHTML = editor.innerHTML || '<em style="color:var(--dim)">nada para pré-visualizar</em>';} else if (tab === 'fullpreview') {editor.classList.remove('is-hidden'); preview.classList.add('is-hidden'); toolbar.classList.remove('is-hidden');
 /* Show full preview modal */
-const title = document.getElementById('post-title').value || '(sem título)';const date = document.getElementById('post-date').value;const tags = postTags;const content = editor.innerHTML;const coverSrc = document.getElementById('post-cover-data').value;document.getElementById('full-preview-content').innerHTML = `<div style="font-family:'VT323',monospace;font-size:0.8rem;color:#b0aac0;letter-spacing:0.15em;margin-bottom:8px;">${date||'sem data'}</div><div style="font-family:'Caveat',cursive;font-size:2.2rem;color:#2e2a3a;line-height:1.2;margin-bottom:12px;">${title}</div>${tags.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px;">${tags.map(t=>`<span style="font-family:'VT323',monospace;font-size:0.72rem;color:#9b8fbd;border:1px solid #c4b8e0;padding:1px 7px;background:#e8e4f0;">${t}</span>`).join('')}</div>`:''}${coverSrc?`<img src="${coverSrc}" style="width:100%;max-height:280px;object-fit:cover;border:1px solid #c4b8e0;margin-bottom:16px;">`:''}${content}`;fpModal.style.display = 'block';fpModal.scrollTop = 0;}}/* ══════════════════════════════════════════════════════TAGS══════════════════════════════════════════════════════ */let projTags = [];function handleTagKey(e, ns) {if (e.key === 'Enter' || e.key === ',') {e.preventDefault();const val = e.target.value.trim().replace(/,/g,'');if (!val) return;if (ns === 'post-tags' && !postTags.includes(val)) { postTags.push(val); renderTagChips('post-tags', postTags); }if (ns === 'proj-tags' && !projTags.includes(val)) { projTags.push(val); renderTagChips('proj-tags', projTags); }e.target.value = '';}}function removeTag(ns, tag) {if (ns === 'post-tags') { postTags = postTags.filter(t => t !== tag); renderTagChips('post-tags', postTags); }if (ns === 'proj-tags') { projTags = projTags.filter(t => t !== tag); renderTagChips('proj-tags', projTags); }}function renderTagChips(ns, tags) {const wrap = document.getElementById(ns + '-wrap');const input = document.getElementById(ns + '-input');wrap.innerHTML = '';tags.forEach(t => {const chip = document.createElement('div');chip.className = 'tag-chip';chip.innerHTML = `${esc(t)}<button class="tag-chip-del" onclick="removeTag('${ns}','${t}')">×</button>`;wrap.appendChild(chip);});wrap.appendChild(input);}/* ══════════════════════════════════════════════════════FILE UPLOADS══════════════════════════════════════════════════════ */function dragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag'); }function dropFile(e, target) {e.preventDefault(); e.currentTarget.classList.remove('drag');const files = e.dataTransfer.files;if (target === 'cover') handleCoverFiles(files);else if (target === 'proj-cover') handleProjCoverFiles(files);else handleAttachFiles(files);}function handleCoverUpload(input) { handleCoverFiles(input.files); }function handleCoverFiles(files) {if (!files[0]) return;const file = files[0];if (!file.type.startsWith('image/')) { toast('apenas imagens para capa', true); return; }if (file.size > 5 * 1024 * 1024) { toast('imagem muito grande (max 5MB)', true); return; }const reader = new FileReader();reader.onload = e => {const data = e.target.result;document.getElementById('post-cover-data').value = data;const prev = document.getElementById('cover-preview');prev.src = data; prev.style.display = 'block';document.getElementById('cover-upload-text').textContent = `[ ${file.name} ]`;};reader.readAsDataURL(file);}function handleProjCoverUpload(input) { handleProjCoverFiles(input.files); }function handleProjCoverFiles(files) {if (!files[0]) return;const file = files[0];if (!file.type.startsWith('image/')) { toast('apenas imagens para capa', true); return; }const reader = new FileReader();reader.onload = e => {const data = e.target.result;document.getElementById('proj-cover-data').value = data;const prev = document.getElementById('proj-cover-preview');prev.src = data; prev.style.display = 'block';document.getElementById('proj-cover-text').textContent = `[ ${file.name} ]`;};reader.readAsDataURL(file);}function handleAttachUpload(input) { handleAttachFiles(input.files); }function handleAttachFiles(files) {Array.from(files).forEach(file => {if (file.size > 20 * 1024 * 1024) { toast(`${file.name} muito grande (max 20MB)`, true); return; }const reader = new FileReader();reader.onload = e => {const type = getFileType(file.type, file.name);postAttachments.push({ name: file.name, url: e.target.result, type, size: formatSize(file.size) });renderAttachList();};reader.readAsDataURL(file);});}function renderAttachList() {const el = document.getElementById('attach-list');el.innerHTML = postAttachments.map((a, i) => `<div class="attachment-item"><span class="attachment-type">${a.type}</span><span class="attachment-name">${esc(a.name)}</span><span class="attachment-size">${a.size}</span><button class="attachment-del" onclick="removeAttach(${i})">×</button></div>`).join('');}function removeAttach(i) { postAttachments.splice(i, 1); renderAttachList(); }function getFileType(mime, name) {if (mime.startsWith('image/')) return 'img';if (mime.startsWith('video/')) return 'video';if (mime === 'application/pdf') return 'pdf';if (name.endsWith('.zip') || name.endsWith('.rar')) return 'zip';return 'file';}function formatSize(bytes) {if (bytes < 1024) return bytes + 'B';if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + 'KB';return (bytes/(1024*1024)).toFixed(1) + 'MB';}/* ══════════════════════════════════════════════════════PROJECTS══════════════════════════════════════════════════════ */function renderProjList() {const projs = DATA.projetos || [];const el = document.getElementById('proj-list');if (!projs.length) { el.innerHTML = '<div class="empty-state">// nenhum projeto ainda.</div>'; return; }el.innerHTML = '<div class="item-list">' + projs.map((p,i) => `<div class="item-row" draggable="true" data-id="${p.id}" data-idx="${i}"ondragstart="dragStart(event)" ondragover="dragOver2(event)" ondrop="dropReorder(event,'projs')"><span style="color:var(--dim);font-family:var(--vt);font-size:1rem;cursor:grab;padding:0 4px;">⠿</span><div class="item-title">${esc(p.title)}</div><div class="item-date">${esc(p.year||'')}</div><div class="item-status status-${p.status}">${p.status === 'published' ? 'publicado' : 'rascunho'}</div><div class="item-actions"><button class="btn btn-sm" onclick="editProj('${p.id}')">editar</button><button class="btn btn-sm btn-danger" onclick="deleteProj('${p.id}')">excluir</button></div></div>`).join('') + '</div>';}function openProjEditor() {projTags = [];document.getElementById('proj-editing-id').value = '';document.getElementById('proj-title').value = '';document.getElementById('proj-year').value = new Date().getFullYear();document.getElementById('proj-desc').value = '';document.getElementById('proj-longdesc').value = '';document.getElementById('proj-status').value = 'published';document.getElementById('proj-link-itch').value = '';document.getElementById('proj-link-github').value = '';document.getElementById('proj-link-demo').value = '';document.getElementById('proj-cover-preview').style.display = 'none';document.getElementById('proj-cover-data').value = '';document.getElementById('proj-cover-text').textContent = '[ clique ou arraste uma imagem ]';document.getElementById('proj-editor-title').textContent = 'Novo Projeto';renderTagChips('proj-tags', projTags);document.getElementById('proj-list').style.display = 'none';document.getElementById('proj-editor').style.display = 'block';}function editProj(id) {const p = (DATA.projetos || []).find(x => x.id === id);if (!p) return;projTags = [...(p.tags || [])];document.getElementById('proj-editing-id').value = p.id;document.getElementById('proj-title').value = p.title || '';document.getElementById('proj-year').value = p.year || '';document.getElementById('proj-desc').value = p.desc || '';document.getElementById('proj-longdesc').value = p.longDesc || '';document.getElementById('proj-status').value = p.status || 'published';document.getElementById('proj-link-itch').value = (p.links && p.links.itch) || '';document.getElementById('proj-link-github').value = (p.links && p.links.github) || '';document.getElementById('proj-link-demo').value = (p.links && p.links.demo) || '';document.getElementById('proj-editor-title').textContent = 'Editar Projeto';if (p.coverImage) {document.getElementById('proj-cover-preview').src = p.coverImage;document.getElementById('proj-cover-preview').style.display = 'block';document.getElementById('proj-cover-data').value = p.coverImage;document.getElementById('proj-cover-text').textContent = '[ imagem selecionada ]';} else {document.getElementById('proj-cover-preview').style.display = 'none';document.getElementById('proj-cover-data').value = '';}renderTagChips('proj-tags', projTags);document.getElementById('proj-list').style.display = 'none';document.getElementById('proj-editor').style.display = 'block';}function closeProjEditor() {document.getElementById('proj-editor').style.display = 'none';document.getElementById('proj-list').style.display = 'block';}function saveProj() {const title = document.getElementById('proj-title').value.trim();if (!title) { toast('nome obrigatório', true); return; }const editingId = document.getElementById('proj-editing-id').value;const proj = {id: editingId || 'proj-' + Date.now(),title, slug: slugify(title),year: document.getElementById('proj-year').value,desc: document.getElementById('proj-desc').value.trim(),longDesc: document.getElementById('proj-longdesc').value.trim(),tags: [...projTags],coverImage: document.getElementById('proj-cover-data').value,links: {itch: document.getElementById('proj-link-itch').value.trim(),github: document.getElementById('proj-link-github').value.trim(),demo: document.getElementById('proj-link-demo').value.trim()},status: document.getElementById('proj-status').value};if (!DATA.projetos) DATA.projetos = [];if (editingId) {const idx = DATA.projetos.findIndex(p => p.id === editingId);if (idx > -1) DATA.projetos[idx] = proj; else DATA.projetos.push(proj);} else {DATA.projetos.push(proj);}saveData();logActivity(`salvou projeto: "${title}"`);toast('projeto salvo!');closeProjEditor();renderProjList();renderDashboard();}function deleteProj(id) {const p = (DATA.projetos || []).find(x => x.id === id);if (!p) return;if (!confirm(`Excluir "${p.title}"?`)) return;DATA.projetos = DATA.projetos.filter(x => x.id !== id);saveData();logActivity(`excluiu projeto: "${p.title}"`);toast('projeto excluído');renderProjList();renderDashboard();}/* ══════════════════════════════════════════════════════SITE EDITOR══════════════════════════════════════════════════════ */async function reloadSiteContent() {
+const title = document.getElementById('post-title').value || '(sem título)';const date = document.getElementById('post-date').value;const tags = postTags;const content = editor.innerHTML;const coverSrc = document.getElementById('post-cover-data').value;document.getElementById('full-preview-content').innerHTML = `<div style="font-family:'VT323',monospace;font-size:0.8rem;color:#b0aac0;letter-spacing:0.15em;margin-bottom:8px;">${date||'sem data'}</div><div style="font-family:'Caveat',cursive;font-size:2.2rem;color:#2e2a3a;line-height:1.2;margin-bottom:12px;">${title}</div>${tags.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px;">${tags.map(t=>`<span style="font-family:'VT323',monospace;font-size:0.72rem;color:#9b8fbd;border:1px solid #c4b8e0;padding:1px 7px;background:#e8e4f0;">${t}</span>`).join('')}</div>`:''}${coverSrc?`<img src="${coverSrc}" style="width:100%;max-height:280px;object-fit:cover;border:1px solid #c4b8e0;margin-bottom:16px;">`:''}${content}`;fpModal.classList.add('is-visible');fpModal.scrollTop = 0;}}/* ══════════════════════════════════════════════════════TAGS══════════════════════════════════════════════════════ */let projTags = [];function handleTagKey(e, ns) {if (e.key === 'Enter' || e.key === ',') {e.preventDefault();const val = e.target.value.trim().replace(/,/g,'');if (!val) return;if (ns === 'post-tags' && !postTags.includes(val)) { postTags.push(val); renderTagChips('post-tags', postTags); }if (ns === 'proj-tags' && !projTags.includes(val)) { projTags.push(val); renderTagChips('proj-tags', projTags); }e.target.value = '';}}function removeTag(ns, tag) {if (ns === 'post-tags') { postTags = postTags.filter(t => t !== tag); renderTagChips('post-tags', postTags); }if (ns === 'proj-tags') { projTags = projTags.filter(t => t !== tag); renderTagChips('proj-tags', projTags); }}function renderTagChips(ns, tags) {const wrap = document.getElementById(ns + '-wrap');const input = document.getElementById(ns + '-input');wrap.innerHTML = '';tags.forEach(t => {const chip = document.createElement('div');chip.className = 'tag-chip';chip.innerHTML = `${esc(t)}<button class="tag-chip-del" onclick="removeTag('${ns}','${t}')">×</button>`;wrap.appendChild(chip);});wrap.appendChild(input);}/* ══════════════════════════════════════════════════════FILE UPLOADS══════════════════════════════════════════════════════ */function dragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag'); }function dropFile(e, target) {e.preventDefault(); e.currentTarget.classList.remove('drag');const files = e.dataTransfer.files;if (target === 'cover') handleCoverFiles(files);else if (target === 'proj-cover') handleProjCoverFiles(files);else handleAttachFiles(files);}function handleCoverUpload(input) { handleCoverFiles(input.files); }function handleCoverFiles(files) {if (!files[0]) return;const file = files[0];if (!file.type.startsWith('image/')) { toast('apenas imagens para capa', true); return; }if (file.size > 5 * 1024 * 1024) { toast('imagem muito grande (max 5MB)', true); return; }const reader = new FileReader();reader.onload = e => {const data = e.target.result;document.getElementById('post-cover-data').value = data;const prev = document.getElementById('cover-preview');prev.src = data; prev.classList.add('is-visible');document.getElementById('cover-upload-text').textContent = `[ ${file.name} ]`;};reader.readAsDataURL(file);}function handleProjCoverUpload(input) { handleProjCoverFiles(input.files); }function handleProjCoverFiles(files) {if (!files[0]) return;const file = files[0];if (!file.type.startsWith('image/')) { toast('apenas imagens para capa', true); return; }const reader = new FileReader();reader.onload = e => {const data = e.target.result;document.getElementById('proj-cover-data').value = data;const prev = document.getElementById('proj-cover-preview');prev.src = data; prev.classList.add('is-visible');document.getElementById('proj-cover-text').textContent = `[ ${file.name} ]`;};reader.readAsDataURL(file);}function handleAttachUpload(input) { handleAttachFiles(input.files); }function handleAttachFiles(files) {Array.from(files).forEach(file => {if (file.size > 20 * 1024 * 1024) { toast(`${file.name} muito grande (max 20MB)`, true); return; }const reader = new FileReader();reader.onload = e => {const type = getFileType(file.type, file.name);postAttachments.push({ name: file.name, url: e.target.result, type, size: formatSize(file.size) });renderAttachList();};reader.readAsDataURL(file);});}function renderAttachList() {const el = document.getElementById('attach-list');el.innerHTML = postAttachments.map((a, i) => `<div class="attachment-item"><span class="attachment-type">${a.type}</span><span class="attachment-name">${esc(a.name)}</span><span class="attachment-size">${a.size}</span><button class="attachment-del" onclick="removeAttach(${i})">×</button></div>`).join('');}function removeAttach(i) { postAttachments.splice(i, 1); renderAttachList(); }function getFileType(mime, name) {if (mime.startsWith('image/')) return 'img';if (mime.startsWith('video/')) return 'video';if (mime === 'application/pdf') return 'pdf';if (name.endsWith('.zip') || name.endsWith('.rar')) return 'zip';return 'file';}function formatSize(bytes) {if (bytes < 1024) return bytes + 'B';if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + 'KB';return (bytes/(1024*1024)).toFixed(1) + 'MB';}/* ══════════════════════════════════════════════════════PROJECTS══════════════════════════════════════════════════════ */function renderProjList() {const projs = DATA.projetos || [];const el = document.getElementById('proj-list');if (!projs.length) { el.innerHTML = '<div class="empty-state">// nenhum projeto ainda.</div>'; return; }el.innerHTML = '<div class="item-list">' + projs.map((p,i) => `<div class="item-row" draggable="true" data-id="${p.id}" data-idx="${i}"ondragstart="dragStart(event)" ondragover="dragOver2(event)" ondrop="dropReorder(event,'projs')"><span style="color:var(--dim);font-family:var(--vt);font-size:1rem;cursor:grab;padding:0 4px;">⠿</span><div class="item-title">${esc(p.title)}</div><div class="item-date">${esc(p.year||'')}</div><div class="item-status status-${p.status}">${p.status === 'published' ? 'publicado' : 'rascunho'}</div><div class="item-actions"><button class="btn btn-sm" onclick="editProj('${p.id}')">editar</button><button class="btn btn-sm btn-danger" onclick="deleteProj('${p.id}')">excluir</button></div></div>`).join('') + '</div>';}function openProjEditor() {projTags = [];document.getElementById('proj-editing-id').value = '';document.getElementById('proj-title').value = '';document.getElementById('proj-year').value = new Date().getFullYear();document.getElementById('proj-desc').value = '';document.getElementById('proj-longdesc').value = '';document.getElementById('proj-status').value = 'published';document.getElementById('proj-link-itch').value = '';document.getElementById('proj-link-github').value = '';document.getElementById('proj-link-demo').value = '';document.getElementById('proj-cover-preview').classList.remove('is-visible');document.getElementById('proj-cover-data').value = '';document.getElementById('proj-cover-text').textContent = '[ clique ou arraste uma imagem ]';document.getElementById('proj-editor-title').textContent = 'Novo Projeto';renderTagChips('proj-tags', projTags);document.getElementById('proj-list').classList.add('is-hidden');document.getElementById('proj-editor').classList.remove('is-hidden');}function editProj(id) {const p = (DATA.projetos || []).find(x => x.id === id);if (!p) return;projTags = [...(p.tags || [])];document.getElementById('proj-editing-id').value = p.id;document.getElementById('proj-title').value = p.title || '';document.getElementById('proj-year').value = p.year || '';document.getElementById('proj-desc').value = p.desc || '';document.getElementById('proj-longdesc').value = p.longDesc || '';document.getElementById('proj-status').value = p.status || 'published';document.getElementById('proj-link-itch').value = (p.links && p.links.itch) || '';document.getElementById('proj-link-github').value = (p.links && p.links.github) || '';document.getElementById('proj-link-demo').value = (p.links && p.links.demo) || '';document.getElementById('proj-editor-title').textContent = 'Editar Projeto';if (p.coverImage) {document.getElementById('proj-cover-preview').src = p.coverImage;document.getElementById('proj-cover-preview').classList.add('is-visible');document.getElementById('proj-cover-data').value = p.coverImage;document.getElementById('proj-cover-text').textContent = '[ imagem selecionada ]';} else {document.getElementById('proj-cover-preview').classList.remove('is-visible');document.getElementById('proj-cover-data').value = '';}renderTagChips('proj-tags', projTags);document.getElementById('proj-list').classList.add('is-hidden');document.getElementById('proj-editor').classList.remove('is-hidden');}function closeProjEditor() {document.getElementById('proj-editor').classList.add('is-hidden');document.getElementById('proj-list').classList.remove('is-hidden');}function saveProj() {const title = document.getElementById('proj-title').value.trim();if (!title) { toast('nome obrigatório', true); return; }const editingId = document.getElementById('proj-editing-id').value;const proj = {id: editingId || 'proj-' + Date.now(),title, slug: slugify(title),year: document.getElementById('proj-year').value,desc: document.getElementById('proj-desc').value.trim(),longDesc: document.getElementById('proj-longdesc').value.trim(),tags: [...projTags],coverImage: document.getElementById('proj-cover-data').value,links: {itch: document.getElementById('proj-link-itch').value.trim(),github: document.getElementById('proj-link-github').value.trim(),demo: document.getElementById('proj-link-demo').value.trim()},status: document.getElementById('proj-status').value};if (!DATA.projetos) DATA.projetos = [];if (editingId) {const idx = DATA.projetos.findIndex(p => p.id === editingId);if (idx > -1) DATA.projetos[idx] = proj; else DATA.projetos.push(proj);} else {DATA.projetos.push(proj);}saveData();logActivity(`salvou projeto: "${title}"`);toast('projeto salvo!');closeProjEditor();renderProjList();renderDashboard();}function deleteProj(id) {const p = (DATA.projetos || []).find(x => x.id === id);if (!p) return;if (!confirm(`Excluir "${p.title}"?`)) return;DATA.projetos = DATA.projetos.filter(x => x.id !== id);saveData();logActivity(`excluiu projeto: "${p.title}"`);toast('projeto excluído');renderProjList();renderDashboard();}/* ══════════════════════════════════════════════════════SITE EDITOR══════════════════════════════════════════════════════ */async function reloadSiteContent() {
   try {
     const r = await fetch('../data/content.json?' + Date.now());
     if (r.ok) { DATA = await r.json(); populateSiteEditor(); toast('dados carregados do servidor!'); return; }
@@ -175,13 +749,13 @@ DATA.novidades = [];document.querySelectorAll('.nov-item').forEach(item => {cons
 /* Stack */
 DATA.stack = [];document.querySelectorAll('.stack-edit-row').forEach(row => {const name = row.querySelector('.se-name').value.trim();const pct = parseInt(row.querySelector('.se-pct').value) || 0;const level = row.querySelector('.se-level').value.trim();if (name) DATA.stack.push({ name, pct, level });});
 /* Contact links */
-DATA.contato.links = [];document.querySelectorAll('.contact-link-row').forEach(row => {const key = row.querySelector('.cl-key').value.trim();const val = row.querySelector('.cl-val').value.trim();const href = row.querySelector('.cl-href').value.trim();if (key && val) DATA.contato.links.push({ key, val, href });});saveData();logActivity('atualizou conteúdo do site');toast('conteúdo salvo!');}/* Novidades editor */function renderNovidades() {const nov = DATA.novidades || [];const wrap = document.getElementById('s-novidades-wrap');wrap.innerHTML = nov.map((n, i) => `<div class="nov-item" style="margin-bottom:16px;border:1px solid var(--lavender);padding:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.1em;">// caixa ${i+1}</span><button class="btn btn-sm btn-danger" onclick="this.closest('.nov-item').remove()">remover</button></div><div class="form-group"><label class="form-label">título</label><input class="form-input nov-title" type="text" value="${esc(n.title)}"></div><div class="form-group"><label class="form-label">linhas (uma por linha)</label><textarea class="form-textarea nov-lines" rows="2">${esc((n.lines||[]).join('\n'))}</textarea></div></div>`).join('') +`<button class="btn btn-sm" onclick="addNovidade()">+ adicionar caixa</button>`;setVal('s-contato-note', (DATA.contato || {}).note || '');}function addNovidade() {const wrap = document.getElementById('s-novidades-wrap');const btn = wrap.querySelector('button:last-child');const div = document.createElement('div');div.className = 'nov-item';div.style.cssText = 'margin-bottom:16px;border:1px solid var(--lavender);padding:16px;';div.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.1em;">// nova caixa</span><button class="btn btn-sm btn-danger" onclick="this.closest('.nov-item').remove()">remover</button></div><div class="form-group"><label class="form-label">título</label><input class="form-input nov-title" type="text" placeholder="// título"></div><div class="form-group"><label class="form-label">linhas</label><textarea class="form-textarea nov-lines" rows="2" placeholder="linha 1&#10;linha 2"></textarea></div>`;wrap.insertBefore(div, btn);}/* Stack editor */function renderStackEditor() {const stack = DATA.stack || [];document.getElementById('s-stack-rows').innerHTML = stack.map(s => `<div class="stack-edit-row" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><input class="form-input se-name" type="text" value="${esc(s.name)}" placeholder="ferramenta" style="flex:2;"><input type="range" class="se-pct" min="0" max="100" value="${s.pct}" oninput="this.nextElementSibling.textContent=this.value+'%'" style="flex:1;"><span style="font-family:var(--vt);font-size:0.78rem;color:var(--dim);width:38px;">${s.pct}%</span><input class="form-input se-level" type="text" value="${esc(s.level)}" placeholder="nível" style="flex:1;"><button class="btn btn-sm btn-danger" onclick="this.closest('.stack-edit-row').remove()">×</button></div>`).join('');}function addStackRow() {const wrap = document.getElementById('s-stack-rows');const div = document.createElement('div');div.className = 'stack-edit-row';div.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px;';div.innerHTML = `<input class="form-input se-name" type="text" placeholder="ferramenta" style="flex:2;"><input type="range" class="se-pct" min="0" max="100" value="50" oninput="this.nextElementSibling.textContent=this.value+'%'" style="flex:1;"><span style="font-family:var(--vt);font-size:0.78rem;color:var(--dim);width:38px;">50%</span><input class="form-input se-level" type="text" placeholder="nível" style="flex:1;"><button class="btn btn-sm btn-danger" onclick="this.closest('.stack-edit-row').remove()">×</button>`;wrap.appendChild(div);}/* Contact links editor */function renderContactLinksEditor() {const links = (DATA.contato || {}).links || [];document.getElementById('s-contato-links-wrap').innerHTML = links.map(l => `<div class="contact-link-row" style="display:grid;grid-template-columns:80px 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;"><input class="form-input cl-key" type="text" value="${esc(l.key)}" placeholder="chave"><input class="form-input cl-val" type="text" value="${esc(l.val)}" placeholder="texto exibido"><input class="form-input cl-href" type="url" value="${esc(l.href)}" placeholder="https://..."><button class="btn btn-sm btn-danger" onclick="this.closest('.contact-link-row').remove()">×</button></div>`).join('');}function addContactLink() {const wrap = document.getElementById('s-contato-links-wrap');const div = document.createElement('div');div.className = 'contact-link-row';div.style.cssText = 'display:grid;grid-template-columns:80px 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;';div.innerHTML = `<input class="form-input cl-key" type="text" placeholder="chave"><input class="form-input cl-val" type="text" placeholder="texto exibido"><input class="form-input cl-href" type="url" placeholder="https://..."><button class="btn btn-sm btn-danger" onclick="this.closest('.contact-link-row').remove()">×</button>`;wrap.appendChild(div);}/* ══════════════════════════════════════════════════════SETTINGS══════════════════════════════════════════════════════ */async function changePassword() {const oldPass = document.getElementById('cfg-pass-old').value;const newPass = document.getElementById('cfg-pass-new').value;const confirmPass = document.getElementById('cfg-pass-confirm').value;if (!oldPass || !newPass || !confirmPass) { toast('preencha todos os campos', true); return; }if (newPass !== confirmPass) { toast('senhas não coincidem', true); return; }if (newPass.length < 6) { toast('senha muito curta (min 6)', true); return; }const oldHash = await sha256(oldPass);const stored = localStorage.getItem('bydan_pass_hash') || DEFAULT_PASS_HASH;if (oldHash !== stored) { toast('senha atual incorreta', true); return; }const newHash = await sha256(newPass);localStorage.setItem('bydan_pass_hash', newHash);document.getElementById('cfg-pass-old').value = '';document.getElementById('cfg-pass-new').value = '';document.getElementById('cfg-pass-confirm').value = '';logActivity('alterou senha de administrador');toast('senha alterada com sucesso!');}function exportJSON() {const json = JSON.stringify(DATA, null, 2);const blob = new Blob([json], { type: 'application/json' });const url = URL.createObjectURL(blob);const a = document.createElement('a');a.href = url; a.download = 'content.json'; a.click();URL.revokeObjectURL(url);toast('content.json exportado!');}function importJSON() { document.getElementById('import-file').click(); }function handleImport(input) {const file = input.files[0];if (!file) return;const reader = new FileReader();reader.onload = e => {try {DATA = JSON.parse(e.target.result);saveData();initAdmin();toast('dados importados com sucesso!');} catch(err) { toast('JSON inválido', true); }};reader.readAsText(file);}function clearLocalData() {if (!confirm('Isso vai apagar todos os dados locais. Tem certeza?')) return;localStorage.removeItem('bydan_content');localStorage.removeItem('bydan_activity');activity = [];logActivity('limpou dados locais');toast('dados locais limpos. recarregando...');setTimeout(() => location.reload(), 1200);}/* ══════════════════════════════════════════════════════GITHUB CONFIG══════════════════════════════════════════════════════ */function loadGithubConfig() {return {user: localStorage.getItem('bydan_gh_user') || '',repo: localStorage.getItem('bydan_gh_repo') || '',branch: localStorage.getItem('bydan_gh_branch') || 'main',path: localStorage.getItem('bydan_gh_path') || 'data/content.json',token: localStorage.getItem('bydan_gh_token') || ''};}function populateGithubConfig() {const c = loadGithubConfig();setVal('cfg-gh-user', c.user);setVal('cfg-gh-repo', c.repo);setVal('cfg-gh-branch', c.branch || 'main');setVal('cfg-gh-path', c.path || 'data/content.json');
+DATA.contato.links = [];document.querySelectorAll('.contact-link-row').forEach(row => {const key = row.querySelector('.cl-key').value.trim();const val = row.querySelector('.cl-val').value.trim();const href = row.querySelector('.cl-href').value.trim();if (key && val) DATA.contato.links.push({ key, val, href });});saveData();logActivity('atualizou conteúdo do site');toast('conteúdo salvo!');}/* Novidades editor */function renderNovidades() {const nov = DATA.novidades || [];const wrap = document.getElementById('s-novidades-wrap');wrap.innerHTML = nov.map((n, i) => `<div class="nov-item" style="margin-bottom:16px;border:1px solid var(--lavender);padding:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span class="label-inline">// caixa ${i+1}</span><button class="btn btn-sm btn-danger" onclick="this.closest('.nov-item').remove()">remover</button></div><div class="form-group"><label class="form-label">título</label><input class="form-input nov-title" type="text" value="${esc(n.title)}"></div><div class="form-group"><label class="form-label">linhas (uma por linha)</label><textarea class="form-textarea nov-lines" rows="2">${esc((n.lines||[]).join('\n'))}</textarea></div></div>`).join('') +`<button class="btn btn-sm" onclick="addNovidade()">+ adicionar caixa</button>`;setVal('s-contato-note', (DATA.contato || {}).note || '');}function addNovidade() {const wrap = document.getElementById('s-novidades-wrap');const btn = wrap.querySelector('button:last-child');const div = document.createElement('div');div.className = 'nov-item';div.style.cssText = 'margin-bottom:16px;border:1px solid var(--lavender);padding:16px;';div.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span class="label-inline">// nova caixa</span><button class="btn btn-sm btn-danger" onclick="this.closest('.nov-item').remove()">remover</button></div><div class="form-group"><label class="form-label">título</label><input class="form-input nov-title" type="text" placeholder="// título"></div><div class="form-group"><label class="form-label">linhas</label><textarea class="form-textarea nov-lines" rows="2" placeholder="linha 1&#10;linha 2"></textarea></div>`;wrap.insertBefore(div, btn);}/* Stack editor */function renderStackEditor() {const stack = DATA.stack || [];document.getElementById('s-stack-rows').innerHTML = stack.map(s => `<div class="stack-edit-row" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><input class="form-input se-name" type="text" value="${esc(s.name)}" placeholder="ferramenta" style="flex:2;"><input type="range" class="se-pct" min="0" max="100" value="${s.pct}" oninput="this.nextElementSibling.textContent=this.value+'%'" style="flex:1;"><span style="font-family:var(--vt);font-size:0.78rem;color:var(--dim);width:38px;">${s.pct}%</span><input class="form-input se-level" type="text" value="${esc(s.level)}" placeholder="nível" style="flex:1;"><button class="btn btn-sm btn-danger" onclick="this.closest('.stack-edit-row').remove()">×</button></div>`).join('');}function addStackRow() {const wrap = document.getElementById('s-stack-rows');const div = document.createElement('div');div.className = 'stack-edit-row';div.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px;';div.innerHTML = `<input class="form-input se-name" type="text" placeholder="ferramenta" style="flex:2;"><input type="range" class="se-pct" min="0" max="100" value="50" oninput="this.nextElementSibling.textContent=this.value+'%'" style="flex:1;"><span style="font-family:var(--vt);font-size:0.78rem;color:var(--dim);width:38px;">50%</span><input class="form-input se-level" type="text" placeholder="nível" style="flex:1;"><button class="btn btn-sm btn-danger" onclick="this.closest('.stack-edit-row').remove()">×</button>`;wrap.appendChild(div);}/* Contact links editor */function renderContactLinksEditor() {const links = (DATA.contato || {}).links || [];document.getElementById('s-contato-links-wrap').innerHTML = links.map(l => `<div class="contact-link-row" style="display:grid;grid-template-columns:80px 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;"><input class="form-input cl-key" type="text" value="${esc(l.key)}" placeholder="chave"><input class="form-input cl-val" type="text" value="${esc(l.val)}" placeholder="texto exibido"><input class="form-input cl-href" type="url" value="${esc(l.href)}" placeholder="https://..."><button class="btn btn-sm btn-danger" onclick="this.closest('.contact-link-row').remove()">×</button></div>`).join('');}function addContactLink() {const wrap = document.getElementById('s-contato-links-wrap');const div = document.createElement('div');div.className = 'contact-link-row';div.style.cssText = 'display:grid;grid-template-columns:80px 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;';div.innerHTML = `<input class="form-input cl-key" type="text" placeholder="chave"><input class="form-input cl-val" type="text" placeholder="texto exibido"><input class="form-input cl-href" type="url" placeholder="https://..."><button class="btn btn-sm btn-danger" onclick="this.closest('.contact-link-row').remove()">×</button>`;wrap.appendChild(div);}/* ══════════════════════════════════════════════════════SETTINGS══════════════════════════════════════════════════════ */async function changePassword() {const oldPass = document.getElementById('cfg-pass-old').value;const newPass = document.getElementById('cfg-pass-new').value;const confirmPass = document.getElementById('cfg-pass-confirm').value;if (!oldPass || !newPass || !confirmPass) { toast('preencha todos os campos', true); return; }if (newPass !== confirmPass) { toast('senhas não coincidem', true); return; }if (newPass.length < 6) { toast('senha muito curta (min 6)', true); return; }if (!(await verifyPassword(oldPass))) { toast('senha atual incorreta', true); return; }const newHash = await hashPassword(newPass);localStorage.setItem('bydan_pass_hash', newHash);document.getElementById('cfg-pass-old').value = '';document.getElementById('cfg-pass-new').value = '';document.getElementById('cfg-pass-confirm').value = '';logActivity('alterou senha de administrador');toast('senha alterada com sucesso!');}function exportJSON() {const json = JSON.stringify(DATA, null, 2);const blob = new Blob([json], { type: 'application/json' });const url = URL.createObjectURL(blob);const a = document.createElement('a');a.href = url; a.download = 'content.json'; a.click();URL.revokeObjectURL(url);toast('content.json exportado!');}function importJSON() { document.getElementById('import-file').click(); }function handleImport(input) {const file = input.files[0];if (!file) return;const reader = new FileReader();reader.onload = e => {try {DATA = JSON.parse(e.target.result);saveData();initAdmin();toast('dados importados com sucesso!');} catch(err) { toast('JSON inválido', true); }};reader.readAsText(file);}function clearLocalData() {if (!confirm('Isso vai apagar todos os dados locais. Tem certeza?')) return;localStorage.removeItem('bydan_content');localStorage.removeItem('bydan_activity');activity = [];logActivity('limpou dados locais');toast('dados locais limpos. recarregando...');setTimeout(() => location.reload(), 1200);}/* ══════════════════════════════════════════════════════GITHUB CONFIG══════════════════════════════════════════════════════ */function loadGithubConfig() {return {user: localStorage.getItem('bydan_gh_user') || '',repo: localStorage.getItem('bydan_gh_repo') || '',branch: localStorage.getItem('bydan_gh_branch') || 'main',path: localStorage.getItem('bydan_gh_path') || 'data/content.json',token: localStorage.getItem('bydan_gh_token') || ''};}function populateGithubConfig() {const c = loadGithubConfig();setVal('cfg-gh-user', c.user);setVal('cfg-gh-repo', c.repo);setVal('cfg-gh-branch', c.branch || 'main');setVal('cfg-gh-path', c.path || 'data/content.json');
 /* Show masked token if saved */
-const tokenInput = document.getElementById('cfg-gh-token');if (tokenInput && c.token) {tokenInput.placeholder = '••••••••••••••• (salvo)';tokenInput.dataset.saved = '1';}updateGhSavedIndicator(c);}function updateGhSavedIndicator(c) {const ind = document.getElementById('gh-saved-indicator');if (ind) ind.style.display = (c.user && c.repo && c.token) ? 'inline' : 'none';}function saveGithubConfig() {const user = getVal('cfg-gh-user').trim();const repo = getVal('cfg-gh-repo').trim();const branch = getVal('cfg-gh-branch').trim() || 'main';const path = getVal('cfg-gh-path').trim() || 'data/content.json';const tokenEl = document.getElementById('cfg-gh-token');const token = tokenEl.value.trim();if (!user || !repo) { toast('usuário e repositório obrigatórios', true); return; }localStorage.setItem('bydan_gh_user', user);localStorage.setItem('bydan_gh_repo', repo);localStorage.setItem('bydan_gh_branch', branch);localStorage.setItem('bydan_gh_path', path);if (token) {localStorage.setItem('bydan_gh_token', token);localStorage.setItem('bydan_gh_token_saved_at', Date.now().toString());tokenEl.value = '';tokenEl.placeholder = '••••••••••••••• (salvo)';tokenEl.dataset.saved = '1';}logActivity('atualizou configuração do GitHub');updateGhSavedIndicator(loadGithubConfig());toast('configuração do GitHub salva!');}function toggleTokenVisibility() {const inp = document.getElementById('cfg-gh-token');const btn = document.getElementById('token-vis-btn');if (inp.type === 'password') {inp.type = 'text';btn.textContent = '[ ocultar ]';} else {inp.type = 'password';btn.textContent = '[ mostrar ]';}}async function testGithubConnection() {const c = loadGithubConfig();const bar = document.getElementById('gh-status-bar');bar.style.display = 'block';bar.style.borderColor = 'var(--lavender)';bar.style.color = 'var(--dim)';bar.textContent = '/* testando conexão... */';if (!c.user || !c.repo || !c.token) {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = '✕ preencha usuário, repositório e token antes de testar.';return;}try {const r = await fetch(`https://api.github.com/repos/${c.user}/${c.repo}`, {headers: { Authorization: `Bearer ${c.token}`, Accept: 'application/vnd.github.v3+json' }});if (r.ok) {const data = await r.json();bar.style.borderColor = 'var(--green)'; bar.style.color = 'var(--green)';bar.textContent = `✓ conectado · ${data.full_name} · branch padrão: ${data.default_branch}`;logActivity('testou conexão com GitHub — sucesso');} else if (r.status === 401) {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = '✕ token inválido ou expirado. gere um novo em github.com/settings/tokens';} else if (r.status === 404) {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = '✕ repositório não encontrado. verifique usuário e nome do repo.';} else {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = `✕ erro ${r.status}. verifique os dados.`;}} catch(e) {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = '✕ erro de rede. verifique sua conexão.';}}/* ══════════════════════════════════════════════════════PUBLISH══════════════════════════════════════════════════════ */function openPublish() {const json = JSON.stringify(DATA, null, 2);const blob = new Blob([json], { type: 'application/json' });const url = URL.createObjectURL(blob);const c = loadGithubConfig();const hasToken = !!(c.user && c.repo && c.token);
+const tokenInput = document.getElementById('cfg-gh-token');if (tokenInput && c.token) {tokenInput.placeholder = '••••••••••••••• (salvo)';tokenInput.dataset.saved = '1';}updateGhSavedIndicator(c);}function updateGhSavedIndicator(c) {const ind = document.getElementById('gh-saved-indicator');if (ind) ind.classList.toggle('is-visible', !!(c.user && c.repo && c.token));}function saveGithubConfig() {const user = getVal('cfg-gh-user').trim();const repo = getVal('cfg-gh-repo').trim();const branch = getVal('cfg-gh-branch').trim() || 'main';const path = getVal('cfg-gh-path').trim() || 'data/content.json';const tokenEl = document.getElementById('cfg-gh-token');const token = tokenEl.value.trim();if (!user || !repo) { toast('usuário e repositório obrigatórios', true); return; }localStorage.setItem('bydan_gh_user', user);localStorage.setItem('bydan_gh_repo', repo);localStorage.setItem('bydan_gh_branch', branch);localStorage.setItem('bydan_gh_path', path);if (token) {localStorage.setItem('bydan_gh_token', token);localStorage.setItem('bydan_gh_token_saved_at', Date.now().toString());tokenEl.value = '';tokenEl.placeholder = '••••••••••••••• (salvo)';tokenEl.dataset.saved = '1';}logActivity('atualizou configuração do GitHub');updateGhSavedIndicator(loadGithubConfig());toast('configuração do GitHub salva!');}function toggleTokenVisibility() {const inp = document.getElementById('cfg-gh-token');const btn = document.getElementById('token-vis-btn');if (inp.type === 'password') {inp.type = 'text';btn.textContent = '[ ocultar ]';} else {inp.type = 'password';btn.textContent = '[ mostrar ]';}}async function testGithubConnection() {const c = loadGithubConfig();const bar = document.getElementById('gh-status-bar');bar.classList.add('is-visible');bar.style.borderColor = 'var(--lavender)';bar.style.color = 'var(--dim)';bar.textContent = '/* testando conexão... */';if (!c.user || !c.repo || !c.token) {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = '✕ preencha usuário, repositório e token antes de testar.';return;}try {const r = await fetch(`https://api.github.com/repos/${c.user}/${c.repo}`, {headers: { Authorization: `Bearer ${c.token}`, Accept: 'application/vnd.github.v3+json' }});if (r.ok) {const data = await r.json();bar.style.borderColor = 'var(--green)'; bar.style.color = 'var(--green)';bar.textContent = `✓ conectado · ${data.full_name} · branch padrão: ${data.default_branch}`;logActivity('testou conexão com GitHub — sucesso');} else if (r.status === 401) {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = '✕ token inválido ou expirado. gere um novo em github.com/settings/tokens';} else if (r.status === 404) {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = '✕ repositório não encontrado. verifique usuário e nome do repo.';} else {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = `✕ erro ${r.status}. verifique os dados.`;}} catch(e) {bar.style.borderColor = 'var(--red)'; bar.style.color = 'var(--red)';bar.textContent = '✕ erro de rede. verifique sua conexão.';}}/* ══════════════════════════════════════════════════════PUBLISH══════════════════════════════════════════════════════ */function openPublish() {const json = JSON.stringify(DATA, null, 2);const blob = new Blob([json], { type: 'application/json' });const url = URL.createObjectURL(blob);const c = loadGithubConfig();const hasToken = !!(c.user && c.repo && c.token);
 /* Reset modal state */
-document.getElementById('pub-progress').style.display = 'none';document.getElementById('pub-result').style.display = 'none';document.getElementById('pub-manual-fallback').style.display = 'none';document.getElementById('pub-auto-btn').disabled = false;document.getElementById('pub-auto-btn').textContent = '[ subir para o github ]';setPubProgress(0, '');if (hasToken) {document.getElementById('pub-with-token').style.display = 'block';document.getElementById('pub-no-token').style.display = 'none';document.getElementById('pub-repo-display').textContent = `${c.user}/${c.repo}`;document.getElementById('pub-branch-display').textContent = c.branch;
+document.getElementById('pub-progress').classList.remove('is-visible');document.getElementById('pub-result').classList.remove('is-visible');document.getElementById('pub-manual-fallback').classList.add('is-hidden');document.getElementById('pub-auto-btn').disabled = false;document.getElementById('pub-auto-btn').textContent = '[ subir para o github ]';setPubProgress(0, '');if (hasToken) {document.getElementById('pub-with-token').classList.remove('is-hidden');document.getElementById('pub-no-token').classList.add('is-hidden');document.getElementById('pub-repo-display').textContent = `${c.user}/${c.repo}`;document.getElementById('pub-branch-display').textContent = c.branch;
 /* Prepare fallback textarea too */
-const ta2 = document.getElementById('publish-json-2');if (ta2) ta2.value = json;const dl2 = document.getElementById('publish-download-2');if (dl2) dl2.href = url;} else {document.getElementById('pub-with-token').style.display = 'none';document.getElementById('pub-no-token').style.display = 'block';document.getElementById('publish-json').value = json;document.getElementById('publish-download').href = url;}document.getElementById('publish-modal').classList.add('open');}function closePublish() {document.getElementById('publish-modal').classList.remove('open');}function showManualFallback() {const json = JSON.stringify(DATA, null, 2);const blob = new Blob([json], { type: 'application/json' });document.getElementById('publish-json-2').value = json;document.getElementById('publish-download-2').href = URL.createObjectURL(blob);document.getElementById('pub-with-token').style.display = 'none';document.getElementById('pub-manual-fallback').style.display = 'block';}function copyPublishJSON() {const ta = document.getElementById('publish-json') || document.getElementById('publish-json-2');navigator.clipboard.writeText(ta.value).then(() => toast('JSON copiado!')).catch(() => toast('erro ao copiar', true));}function setPubProgress(pct, msg) {const bar = document.getElementById('pub-progress-bar');const text = document.getElementById('pub-progress-text');if (bar) bar.style.width = pct + '%';if (text) text.textContent = msg;}function showPubResult(success, msg) {const el = document.getElementById('pub-result');el.style.display = 'block';el.style.borderColor = success ? 'var(--green)' : 'var(--red)';el.style.color = success ? 'var(--green)' : 'var(--red)';el.textContent = (success ? '✓ ' : '✕ ') + msg;}async function publishToGitHub() {const c = loadGithubConfig();if (!c.user || !c.repo || !c.token) {toast('configure o GitHub em Config primeiro', true); return;}const btn = document.getElementById('pub-auto-btn');btn.disabled = true;btn.textContent = '/* publicando... */';document.getElementById('pub-progress').style.display = 'block';document.getElementById('pub-result').style.display = 'none';const json = JSON.stringify(DATA, null, 2);const content = btoa(unescape(encodeURIComponent(json))); 
+const ta2 = document.getElementById('publish-json-2');if (ta2) ta2.value = json;const dl2 = document.getElementById('publish-download-2');if (dl2) dl2.href = url;} else {document.getElementById('pub-with-token').classList.add('is-hidden');document.getElementById('pub-no-token').classList.remove('is-hidden');document.getElementById('publish-json').value = json;document.getElementById('publish-download').href = url;}document.getElementById('publish-modal').classList.add('open');}function closePublish() {document.getElementById('publish-modal').classList.remove('open');}function showManualFallback() {const json = JSON.stringify(DATA, null, 2);const blob = new Blob([json], { type: 'application/json' });document.getElementById('publish-json-2').value = json;document.getElementById('publish-download-2').href = URL.createObjectURL(blob);document.getElementById('pub-with-token').classList.add('is-hidden');document.getElementById('pub-manual-fallback').classList.remove('is-hidden');}function copyPublishJSON() {const ta = document.getElementById('publish-json') || document.getElementById('publish-json-2');navigator.clipboard.writeText(ta.value).then(() => toast('JSON copiado!')).catch(() => toast('erro ao copiar', true));}function setPubProgress(pct, msg) {const bar = document.getElementById('pub-progress-bar');const text = document.getElementById('pub-progress-text');if (bar) bar.style.width = pct + '%';if (text) text.textContent = msg;}function showPubResult(success, msg) {const el = document.getElementById('pub-result');el.classList.add('is-visible');el.style.borderColor = success ? 'var(--green)' : 'var(--red)';el.style.color = success ? 'var(--green)' : 'var(--red)';el.textContent = (success ? '✓ ' : '✕ ') + msg;}async function publishToGitHub() {const c = loadGithubConfig();if (!c.user || !c.repo || !c.token) {toast('configure o GitHub em Config primeiro', true); return;}const btn = document.getElementById('pub-auto-btn');btn.disabled = true;btn.textContent = '/* publicando... */';document.getElementById('pub-progress').classList.add('is-visible');document.getElementById('pub-result').classList.remove('is-visible');const json = JSON.stringify(DATA, null, 2);const content = btoa(unescape(encodeURIComponent(json))); 
 /* base64 UTF-8 safe */
 const apiBase = `https://api.github.com/repos/${c.user}/${c.repo}/contents/${c.path}`;const headers = {Authorization: `Bearer ${c.token}`,Accept: 'application/vnd.github.v3+json','Content-Type': 'application/json'};try {
 /* Step 1 */
@@ -189,16 +763,16 @@ setPubProgress(20, '/* verificando arquivo atual... */');let sha = null;const ge
 /* Step 2 */
 setPubProgress(60, '/* enviando content.json... */');const now = new Date().toLocaleString('pt-BR');const body = {message: `conteúdo: atualização via admin · ${now}`,content,branch: c.branch,...(sha ? { sha } : {})};const putResp = await fetch(apiBase, {method: 'PUT',headers,body: JSON.stringify(body)});if (!putResp.ok) {const err = await putResp.json();if (putResp.status === 401) throw new Error('token inválido ou expirado. vá em Config → GitHub para renovar.');if (putResp.status === 403) throw new Error('sem permissão. o token precisa de Contents: Read & Write.');if (putResp.status === 409) throw new Error('conflito de versão. recarregue o admin e tente novamente.');throw new Error(err.message || `erro ${putResp.status}`);}const result = await putResp.json();setPubProgress(100, '/* publicado com sucesso! */');const shortSha = result.commit?.sha?.slice(0, 7) || '—';showPubResult(true, `publicado · commit ${shortSha} · deploy em andamento (~1 min)`);logActivity(`publicou no GitHub · commit ${shortSha}`);btn.textContent = '✓ publicado';
 /* Auto-close after 3s on success */
-setTimeout(() => closePublish(), 3000);} catch(e) {setPubProgress(0, '');document.getElementById('pub-progress').style.display = 'none';showPubResult(false, e.message || 'erro desconhecido');btn.disabled = false;btn.textContent = '[ tentar novamente ]';logActivity(`erro ao publicar: ${e.message}`);}}/* ══════════════════════════════════════════════════════UTILS══════════════════════════════════════════════════════ */function toast(msg, err) {const el = document.getElementById('toast');el.textContent = msg;el.className = 'show' + (err ? ' err' : '');setTimeout(() => el.className = '', 2500);}function esc(str) {if (!str) return '';return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}function slugify(str) {return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }function getVal(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+setTimeout(() => closePublish(), 3000);} catch(e) {setPubProgress(0, '');document.getElementById('pub-progress').classList.remove('is-visible');showPubResult(false, e.message || 'erro desconhecido');btn.disabled = false;btn.textContent = '[ tentar novamente ]';logActivity(`erro ao publicar: ${e.message}`);}}/* ══════════════════════════════════════════════════════UTILS══════════════════════════════════════════════════════ */function toast(msg, err) {const el = document.getElementById('toast');el.textContent = msg;el.className = 'show' + (err ? ' err' : '');setTimeout(() => el.className = '', 2500);}function esc(str) {if (!str) return '';return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}function slugify(str) {return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }function getVal(id) { const el = document.getElementById(id); return el ? el.value : ''; }
 /* Close modal on backdrop click */
 document.getElementById('publish-modal').addEventListener('click', e => {if (e.target === document.getElementById('publish-modal')) closePublish();});
 
 /* ══ AVATAR MODE ══ */
 function setAvatarMode(mode) {
   document.getElementById('s-avatar-mode').value = mode;
-  document.getElementById('av-mode-emoji').style.display = mode==='emoji' ? 'block' : 'none';
-  document.getElementById('av-mode-sigla').style.display = mode==='sigla' ? 'block' : 'none';
-  document.getElementById('av-mode-img').style.display = mode==='img' ? 'block' : 'none';
+  document.getElementById('av-mode-emoji').classList.toggle('is-hidden', mode!=='emoji');
+  document.getElementById('av-mode-sigla').classList.toggle('is-hidden', mode!=='sigla');
+  document.getElementById('av-mode-img').classList.toggle('is-hidden', mode!=='img');
   ['emoji','sigla','img'].forEach(m => {
     const btn = document.getElementById('av-tab-'+m);
     if(btn) btn.style.background = m===mode ? 'var(--lavender)' : '';
@@ -213,7 +787,7 @@ function handleAvatarUpload(input) {
   reader.onload = e => {
     document.getElementById('s-avatar-url').value = e.target.result;
     const prev = document.getElementById('av-img-preview');
-    prev.src = e.target.result; prev.style.display='block';
+    prev.src = e.target.result; prev.classList.add('is-visible');
   };
   reader.readAsDataURL(file);
 }
@@ -231,7 +805,7 @@ populateSiteEditor = function() {
 
     const preview = document.getElementById('av-img-preview');
     preview.src = av;
-    preview.style.display = 'block';
+    preview.classList.add('is-visible');
 
   } else if (av.length > 2 && !/[^a-zA-Z0-9\.·]/.test(av)) {
     setAvatarMode('sigla');
@@ -262,9 +836,9 @@ saveSiteContent = function() {
 let _musicPreviewCtx = null;
 function setMusicMode(mode) {
   document.getElementById('cfg-music-mode').value = mode;
-  document.getElementById('mus-mode-preset').style.display = mode==='preset' ? 'block' : 'none';
-  document.getElementById('mus-mode-url').style.display = mode==='url' ? 'block' : 'none';
-  document.getElementById('mus-mode-file').style.display = mode==='file' ? 'block' : 'none';
+  document.getElementById('mus-mode-preset').classList.toggle('is-hidden', mode!=='preset');
+  document.getElementById('mus-mode-url').classList.toggle('is-hidden', mode!=='url');
+  document.getElementById('mus-mode-file').classList.toggle('is-hidden', mode!=='file');
   ['preset','url','file'].forEach(m => {
     const btn = document.getElementById('mus-tab-'+m);
     if(btn) btn.style.background = m===mode ? 'var(--lavender)' : '';
@@ -344,4 +918,6 @@ function saveMusicSettings() {
 }
 /* Init music tabs on load */
 document.addEventListener('DOMContentLoaded', () => { setAvatarMode('emoji'); setMusicMode('preset'); });
-</script></body></html>
+</script>
+  </body>
+</html>
