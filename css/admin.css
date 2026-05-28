@@ -1383,3 +1383,79 @@ button {
   display: inline-block;
   margin-top: 6px;
 }
+
+.item-drag-handle {
+  color: var(--dim);
+  font-family: var(--vt);
+  font-size: 1rem;
+  cursor: grab;
+  padding: 0 4px;
+}
+
+.item-status--scheduled {
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.nov-item {
+  margin-bottom: 16px;
+  border: 1px solid var(--lavender);
+  padding: 16px;
+}
+
+.nov-item-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.stack-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.stack-edit-row .se-name {
+  flex: 2;
+}
+
+.stack-edit-row .se-pct {
+  flex: 1;
+}
+
+.stack-edit-row .se-pct-val {
+  font-family: var(--vt);
+  font-size: 0.78rem;
+  color: var(--dim);
+  width: 38px;
+}
+
+.stack-edit-row .se-level {
+  flex: 1;
+}
+
+.contact-link-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr auto;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+#content-file-status {
+  margin: 0 0 16px;
+  padding: 8px 12px;
+  border: 1px dashed var(--lavender);
+  background: var(--bg2);
+}
+
+#content-file-status.is-linked {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+#content-file-status.is-error {
+  border-color: var(--red);
+  color: var(--red);
+}

@@ -1,20 +1,20 @@
 {
   "meta": {
-    "siteTitle": "Daniel Amaral",
-    "siteSub": "portfólio · em deriva",
-    "siteSym": "✦ ◌ ✦ ◌ ✦",
-    "marquee": "✦ bem-vindo ao meu portfólio · · · projetos, pensamentos e coisas estranhas · · · bydan.com.br · · · ✦ bem-vindo ao meu portfólio · · · projetos, pensamentos e coisas estranhas · · · bydan.com.br · · · ",
-    "footerSym": "✦ ◌ ✦ ◌ ✦",
-    "footerInfo": "bydan.com.br · arquivo pessoal · 2026 · feito à mão",
-    "wanderText": "✦ bydan.com.br · portfólio · em deriva · ✦",
+    "siteTitle": "Daniel Carvalho",
+    "siteSub": "blog",
+    "siteSym": "🤖🤖🤖🤖",
+    "marquee": "✦ bem-vindo ao meu blog · · · pensamentos, dicas, tutoriais · · · ✦ bem-vindo ao meu blog · · · pensamentos, dicas, tutoriais · · · ✦",
+    "footerSym": "🤖🤖🤖🤖",
+    "footerInfo": "Daniel Carvalho · 2026",
+    "wanderText": "✦ Hello World ✦",
     "badges": [
-      "bydan.com.br",
-      "dreamcore",
-      "gamedev",
-      "neocities",
-      "est. 2025"
+      "webdev",
+      "php",
+      "docker",
+      "linux",
+      "est. 2018"
     ],
-    "typewriterMsg": "Um espaço esquecido.\nProjetos, pensamentos e outras coisas.\nAprendizagem.",
+    "typewriterMsg": "Linux\nDocker\nWeb Development\nPHP\ne muito mais!",
     "musicMode": "preset",
     "musicVol": 0.35,
     "musicPreset": "cassette"
@@ -22,88 +22,80 @@
   "sobre": {
     "avatar": "D",
     "paragraphs": [
-      "Olá, eu sou Daniel Amaral — tenho 14 anos e estou aprendendo a construir coisas na internet.",
-      "Trabalho principalmente com GameMaker Studio 2 e GML para criar jogos, e estou expandindo para Python e HTML/CSS. Cada projeto é uma forma de aprender fazendo.",
-      "Trato a internet como um espaço habitável. Faço jogos, ferramentas e interfaces que parecem já ter existido antes de você encontrá-las — coisas que carregam silêncio mesmo enquanto ainda funcionam."
+      "Olá, eu sou Daniel Carvalho — tenho 27 anos e sou desenvolvedor web. Crio soluções e resolvo problemas"
     ],
-    "handnote": "Vejo software como arquitetura e a internet como ruína."
+    "handnote": "Se o código está confuso, provavelmente o caminho está errado."
   },
   "filosofia": {
-    "quote": "O software moderno tem medo do silêncio.",
+    "quote": "E então ...",
     "paragraphs": [
-      "Tecnologia também envelhece.",
-      "Sites apodrecem, arquivos desaparecem, sistemas ficam vazios como prédios abandonados.",
-      "Eu gosto disso.",
-      "Gosto da ideia de que um jogo pode parecer um sonho mal lembrado, que uma interface pode provocar estranhamento, que um software pode carregar silêncio.",
-      "Não quero criar coisas perfeitas.",
-      "Quero criar coisas que pareçam ter vivido antes de você encontrá-las."
+      "Se até as variáveis precisam ser declaradas porque não me declarar pra você?"
     ]
   },
   "contato": {
-    "note": "não respondo rápido, mas respondo com cuidado.",
+    "note": "respondo rápido e fico muito feliz em colaborar",
     "links": [
       {
-        "key": "itch",
-        "val": "dan1-b1p.itch.io",
-        "href": "https://dan1-b1p.itch.io/"
+        "key": "email",
+        "val": "danielcarvalhodev@gmail.com",
+        "href": "danielcarvalhodev@gmail.com"
       },
       {
         "key": "github",
-        "val": "github.com/danreposi",
-        "href": "https://github.com/danreposi"
+        "val": "https://github.com/dancarvalhodev",
+        "href": "https://github.com/dancarvalhodev"
       },
       {
-        "key": "email",
-        "val": "danielalvesamaral641@gmail.com",
-        "href": "danielalvesamaral641@gmail.com"
+        "key": "linkedin",
+        "val": "https://www.linkedin.com/in/daniel-carvalho-02578a15a",
+        "href": "https://www.linkedin.com/in/daniel-carvalho-02578a15a"
       }
     ]
   },
   "stack": [
     {
-      "name": "Gamemaker Studio 2",
+      "name": "PHP",
       "pct": 95,
       "level": "principal"
     },
     {
-      "name": "GML",
+      "name": "Linux",
       "pct": 85,
       "level": "fluente"
     },
     {
-      "name": "Python",
-      "pct": 55,
-      "level": "regular"
+      "name": "MySQL",
+      "pct": 80,
+      "level": "fluente"
     },
     {
       "name": "HTML / CSS",
-      "pct": 45,
-      "level": "regular"
+      "pct": 90,
+      "level": "fluente"
     },
     {
-      "name": "Aseprite",
-      "pct": 80,
-      "level": "pixel art"
+      "name": "Docker",
+      "pct": 70,
+      "level": "curioso"
     },
     {
-      "name": "Krita",
-      "pct": 75,
-      "level": "ambiente"
+      "name": "Kubernetes",
+      "pct": 40,
+      "level": "estudando"
     }
   ],
   "novidades": [
     {
       "title": "// novidades",
       "lines": [
-        "novo projeto em desenvolvimento. detalhes em breve.",
-        "blog atualizado · 22.05.2026"
+        "Versão 1.0 do Wecker",
+        "https://github.com/dancarvalhodev/wecker"
       ]
     },
     {
       "title": "// sobre o site",
       "lines": [
-        "arquivo pessoal e criativo de um dev em deriva. feito à mão.",
-        "melhor em desktop."
+        "arquivo pessoal e criativo de um dev adulto premium."
       ]
     }
   ],

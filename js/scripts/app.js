@@ -1,9 +1,15 @@
 let DATA=null,currentSection='inicio',activeTag=null,searchQuery='',readerMode=false,currentPostId=null,activeProjTag=null,twDone=false;
 
 async function loadData(){
-  const local=localStorage.getItem('bydan_content');
-  if(local){try{DATA=JSON.parse(local);}catch(e){}}
-  if(!DATA){try{const r=await fetch('data/content.json?v='+Date.now());DATA=await r.json();}catch(e){DATA={};}}
+  try{
+    const r=await fetch('data/content.json?v='+Date.now());
+    if(r.ok) DATA=await r.json();
+  }catch(e){}
+  if(!DATA||!Object.keys(DATA).length){
+    const local=localStorage.getItem('bydan_content');
+    if(local){try{DATA=JSON.parse(local);}catch(e){}}
+  }
+  if(!DATA) DATA={};
   render();
 }
 
