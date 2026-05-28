@@ -3,17 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <title>bydan — arquivo pessoal</title>
+  <meta name="description" content="Arquivo pessoal de bydan: projetos, blog, stack e contato.">
+  <meta name="robots" content="index,follow">
+
+  <link rel="canonical" href="https://bydan.com.br/">
   <link rel="icon" type="image/x-icon" href="public/favicon.ico">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="bydan">
+  <meta property="og:title" content="bydan — arquivo pessoal">
+  <meta property="og:description" content="Arquivo pessoal de bydan: projetos, blog, stack e contato.">
+  <meta property="og:url" content="https://bydan.com.br/">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="bydan — arquivo pessoal">
+  <meta name="twitter:description" content="Arquivo pessoal de bydan: projetos, blog, stack e contato.">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<!-- Bolinha do cursor -->
-<div id="cur"></div>
-<!-- Container -->
-<div id="cur-ring"></div>
-<div id="wander"></div>
+<a href="#conteudo" class="skip-link">pular para o conteúdo</a>
 
 <!-- Botões fixos -->
 <div id="fixed-btns">
@@ -25,20 +36,20 @@
 <div id="outer">
     <!-- Banner principal -->
     <header id="site-header">
-      <div class="deco-float df1" style="--rot:-8deg;">✦</div>
-      <div class="deco-float df2" style="--rot:6deg;">◌</div>
-      <div class="deco-float df3" style="--rot:-4deg;">⋆</div>
-      <div class="deco-float df4" style="--rot:10deg;">✧</div>
+      <div class="deco-float df1">✦</div>
+      <div class="deco-float df2">◌</div>
+      <div class="deco-float df3">⋆</div>
+      <div class="deco-float df4">✧</div>
       <div class="banner-box">
-        <span class="banner-sym" id="d-siteSym"></span>
-        <span class="banner-title" id="d-siteTitle"></span>
-        <span class="banner-sub" id="d-siteSub"></span>
+        <div class="banner-sym" id="site-sym"></div>
+        <h1 class="banner-title" id="site-title">bydan</h1>
+        <p class="banner-sub" id="site-sub"></p>
       </div>
-      <div class="badges-row" id="d-badges"></div>
+      <div class="badges-row" id="site-badges"></div>
     </header>
 
     <!-- Navegação -->
-    <nav id="nav">
+    <nav id="nav" aria-label="Navegação principal">
       <button class="nlink on" data-t="inicio">inicio</button>
       <button class="nlink" data-t="sobre">sobre</button>
       <button class="nlink" data-t="projetos">projetos</button>
@@ -47,51 +58,53 @@
       <button class="nlink" data-t="stack">stack</button>
       <button class="nlink" data-t="contato">contato</button>
     </nav>
-    <div class="marquee-wrap"><span class="marquee-inner" id="d-marquee"></span></div>
+    <div class="marquee-wrap" aria-hidden="true"><span class="marquee-inner" id="marquee"></span></div>
 
     <!-- Seções -->
-    <section id="inicio" class="sec on">
+    <main id="conteudo">
+    <section id="inicio" class="sec on" aria-labelledby="inicio-title">
+      <h2 id="inicio-title" class="sr-only">Início</h2>
       <div class="welcome-box">
-        <p style="font-family:var(--vt);font-size:1rem;color:var(--lilac);letter-spacing:0.15em;margin-bottom:6px;">» agora entrando em bydan.com.br...</p>
+        <p class="welcome-enter">» agora entrando em bydan.com.br...</p>
         <div class="tw-line"><span id="tw-text"></span><span id="tw-cur">_</span></div>
       </div>
-      <div class="inicio-grid" id="d-novidades"></div>
+      <div class="inicio-grid" id="novidades"></div>
       <div class="div">· · transmissões recentes · ·</div>
-      <div id="d-recent-posts"></div>
-      <div style="text-align:center;margin:20px 0;">
-        <a class="read-more" onclick="go('blog');return false;" href="#">[ ver todas as entradas ]</a>
+      <div id="recent-posts"></div>
+      <div class="center-row">
+        <a class="read-more" data-go="blog" href="#">[ ver todas as entradas ]</a>
       </div>
       <div class="div">✦</div>
     </section>
     <section id="sobre" class="sec">
       <div class="sec-head">sobre <span>// arquivo pessoal</span></div>
       <div class="sobre-layout">
-        <div class="avatar-box" id="d-avatar"></div>
-        <div class="sobre-text" id="d-sobre-text"></div>
+        <div class="avatar-box" id="avatar"></div>
+        <div class="sobre-text" id="sobre-text"></div>
       </div>
       <div class="div">✦</div>
     </section>
     <section id="projetos" class="sec">
       <div class="sec-head">projetos <span>// estruturas digitais</span></div>
       <div id="proj-tag-filter" class="tag-filter"></div>
-      <div class="proj-grid" id="d-proj-grid"></div>
+      <div class="proj-grid" id="proj-grid"></div>
       <div class="div">✦</div>
     </section>
     <section id="blog" class="sec">
       <div class="sec-head">blog <span>// registros</span></div>
       <div id="search-wrap">
-        <input type="search" id="search-input" placeholder="// buscar posts..." oninput="onSearch(this.value)">
-        <button id="search-clear" onclick="clearSearch()">✕</button>
+        <input type="search" id="search-input" placeholder="// buscar posts...">
+        <button id="search-clear" type="button">✕</button>
       </div>
       <div id="blog-tag-filter" class="tag-filter"></div>
       <div id="search-results-count"></div>
-      <div id="d-blog-posts"></div>
+      <div id="blog-posts"></div>
       <div class="div">✦</div>
     </section>
     <div id="post-view">
       <div class="post-view-controls">
-        <a class="back-btn" onclick="closePost();return false;" href="#">[ ← voltar ]</a>
-        <button class="reader-btn" id="reader-btn" onclick="toggleReader()">[ leitura ]</button>
+        <a class="back-btn" data-action="close-post" href="#">[ ← voltar ]</a>
+        <button class="reader-btn" id="reader-btn" type="button">[ leitura ]</button>
       </div>
       <div class="post-content" id="post-view-content"></div>
       <div class="post-nav" id="post-nav"></div>
@@ -99,36 +112,36 @@
     <section id="filosofia" class="sec">
       <div class="sec-head">filosofia <span>// manifesto</span></div>
       <div class="filo-box">
-        <span class="filo-quote" id="d-filo-quote"></span>
-        <div id="d-filo-paras"></div>
+        <span class="filo-quote" id="filo-quote"></span>
+        <div id="filo-paras"></div>
         <span class="sym-deco">✦ ◌ ✧ ◌ ✦</span>
       </div>
       <div class="div">✦</div>
     </section>
     <section id="stack" class="sec">
       <div class="sec-head">stack <span>// ferramentas</span></div>
-      <div class="stack-table" id="d-stack"></div>
+      <div class="stack-table" id="stack-table"></div>
       <div class="div">✦</div>
     </section>
     <section id="contato" class="sec">
       <div class="sec-head">contato <span>// sinais</span></div>
       <div class="contato-box">
-        <span class="contato-note" id="d-contato-note"></span>
-        <div id="d-contato-links"></div>
+        <span class="contato-note" id="contato-note"></span>
+        <div id="contato-links"></div>
       </div>
       <div class="div">✦</div>
     </section>
+    </main>
     <footer id="site-footer">
-      <span class="footer-sym" id="d-footerSym"></span>
-      <div class="footer-info" id="d-footerInfo"></div>
+      <span class="footer-sym" id="footer-sym"></span>
+      <div class="footer-info" id="footer-info"></div>
       <div class="footer-links">
         <a href="/feed.xml">rss</a>
-        <a href="admin/index.html" style="opacity:0;font-size:0.1px;color:transparent;pointer-events:auto;" title="·">·</a>
+        <a href="admin/index.html" class="admin-link-hidden" title="·">·</a>
       </div>
     </footer>
 </div>
-<script src="js/jquery-4.0.0.min.js"></script>
 <script src="js/scripts/main.js"></script>
-<script src="app.js"></script>
+<script src="js/scripts/app.js"></script>
 </body>
 </html>

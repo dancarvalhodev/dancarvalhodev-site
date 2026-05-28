@@ -1,73 +1,28 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>bydan — 404</title><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet"><style>
-:root{--bg:#f0edf5;--paper:#faf8fc;--text:#2e2a3a;--muted:#7a7290;--dim:#b0aac0;--lilac:#9b8fbd;--lavender:#c4b8e0;--hand:'Caveat',cursive;--vt:'VT323',monospace;--mono:'Space Mono',monospace;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:13px;min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:16px;overflow-x:hidden;}
-@media(hover:hover){*{cursor:none;}}
-#cur{width:6px;height:6px;background:var(--lilac);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s;}
-@media(hover:none){#cur{display:none;}}
-.box{border:1.5px solid var(--lavender);background:var(--paper);padding:40px 48px;text-align:center;box-shadow:4px 4px 0 var(--lavender);max-width:480px;width:100%;animation:pop .4s cubic-bezier(.34,1.56,.64,1) both;}
-@keyframes pop{from{opacity:0;transform:scale(.92) translateY(12px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.num{font-family:var(--hand);font-size:7rem;font-weight:700;color:var(--lavender);line-height:1;display:block;animation:wobble 4s ease-in-out infinite;}
-@keyframes wobble{0%,100%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}}
-.emoji{font-size:2.4rem;display:block;margin:8px 0;animation:bounce 2s ease-in-out infinite;}
-@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.msg{font-family:var(--vt);font-size:1.05rem;color:var(--dim);letter-spacing:0.12em;display:block;margin:10px 0 6px;line-height:1.6;}
-.note{font-family:var(--hand);font-size:1.15rem;color:var(--muted);margin-bottom:6px;display:block;transform:rotate(-0.5deg);}
-.subnote{font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.1em;margin-bottom:28px;display:block;opacity:.7;}
-.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-a.btn{font-family:var(--vt);font-size:0.95rem;color:var(--lilac);text-decoration:none;letter-spacing:0.1em;border:1px solid var(--lavender);padding:7px 20px;background:var(--bg);transition:background .2s,color .2s;display:inline-block;}
-a.btn:hover{color:var(--text);background:var(--lavender);}
-.static-row{display:flex;justify-content:center;gap:4px;margin-top:20px;flex-wrap:wrap;}
-.px{width:8px;height:8px;background:var(--lavender);opacity:.3;border-radius:1px;}
-.reload-note{font-family:var(--vt);font-size:0.72rem;color:var(--dim);letter-spacing:.08em;margin-top:18px;opacity:.5;}
-@media(max-width:480px){
-  .box{padding:28px 20px;}
-  .num{font-size:5rem;}
-  .emoji{font-size:2rem;}
-  .msg{font-size:.92rem;}
-  .note{font-size:1rem;}
-}
-</style></head><body>
-<div id="cur"></div>
-<div class="box">
-  <span class="num">404</span>
-  <span class="emoji" id="emoji">🌀</span>
-  <span class="msg" id="msg">// página não encontrada</span>
-  <span class="note" id="note">este lugar não existe mais, ou nunca existiu.</span>
-  <span class="subnote" id="subnote">tente procurar em outro plano de existência.</span>
-  <div class="btn-row">
-    <a class="btn" href="/">[ ← voltar ao arquivo ]</a>
-    <a class="btn" href="javascript:history.back()">[ tentar de novo ]</a>
-  </div>
-  <div class="static-row" id="static-row"></div>
-  <div class="reload-note">// acesse novamente para uma mensagem diferente</div>
-</div>
-<script>
-const msgs = [
-  { emoji:'🕳️', msg:'// buraco negro detectado', note:'a página caiu nessa dimensão e sumiu.', sub:'clique para voltar antes que você também suma.' },
-  { emoji:'👻', msg:'// assombrado e inacessível', note:'a página foi embora, mas o fantasma ficou.', sub:'f para pagar respeitos.' },
-  { emoji:'🦗', msg:'// só grilos por aqui', note:'tinha algo aqui. tinha. juramos.', sub:'o servidor também não faz ideia do que aconteceu.' },
-  { emoji:'🧩', msg:'// peça faltando', note:'alguém removeu essa parte do quebra-cabeça.', sub:'o restante do site sobreviveu, porém.' },
-  { emoji:'🌫️', msg:'// rota evaporada', note:'esta URL se dissolveu no ar de madrugada.', sub:'o arquivo segue existindo em outro link.' },
-  { emoji:'📡', msg:'// sinal perdido', note:'transmissão interrompida. estática infinita.', sub:'tente sintonizar em outra frequência.' },
-  { emoji:'🐌', msg:'// a página foi embora devagar', note:'levou as malas. deixou só esse erro.', sub:'não deixou nem bilhete.' },
-  { emoji:'🔮', msg:'// futuro sombrio para essa URL', note:'a bola de cristal diz que a página não volta.', sub:'mas o arquivo principal ainda respira.' },
-  { emoji:'🗿', msg:'// imóvel e vazio', note:'nem a estátua sabe onde está a página.', sub:'a escultura apenas observa. sem respostas.' },
-  { emoji:'🌒', msg:'// a página foi para o lado escuro', note:'não é pessoal. simplesmente desapareceu.', sub:'o universo deletou e não deixou lixeira.' },
-  { emoji:'🐛', msg:'// bug encontrado... ou você é o bug?', note:'reflexão: quem é o 404 aqui?', sub:'a filosofia não resolve, mas é bonita.' },
-  { emoji:'📭', msg:'// caixa de correio vazia', note:'esperamos. a carta nunca chegou.', sub:'o endereço pode ter mudado. ou nunca existiu.' },
-  { emoji:'🧊', msg:'// congelado para sempre', note:'a página estava aqui. agora é gelo digital.', sub:'beleza cristalina. utilidade zero.' },
-  { emoji:'🎲', msg:'// acesso aleatório: falhou', note:'o dado rolou e tirou 404.', sub:'recarregue para uma nova mensagem. é isso.' },
-];
-const r = msgs[Math.floor(Math.random() * msgs.length)];
-document.getElementById('emoji').textContent = r.emoji;
-document.getElementById('msg').textContent = r.msg;
-document.getElementById('note').textContent = r.note;
-document.getElementById('subnote').textContent = r.sub;
-// pixel static deco
-const row = document.getElementById('static-row');
-for(let i=0;i<20;i++){const d=document.createElement('div');d.className='px';d.style.opacity=(Math.random()*0.4+0.1).toFixed(2);row.appendChild(d);}
-// cursor
-const cur=document.getElementById('cur');
-document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
-</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>bydan — 404</title>
+  <meta name="robots" content="noindex,follow">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-404">
+  <main class="box">
+    <span class="num">404</span>
+    <span class="emoji" id="emoji">🌀</span>
+    <span class="msg" id="msg">// página não encontrada</span>
+    <span class="note" id="note">este lugar não existe mais, ou nunca existiu.</span>
+    <span class="subnote" id="subnote">tente procurar em outro plano de existência.</span>
+    <div class="btn-row">
+      <a class="btn" href="/">[ ← voltar ao arquivo ]</a>
+      <a class="btn" href="#" data-action="history-back">[ tentar de novo ]</a>
+    </div>
+    <div class="static-row" id="static-row"></div>
+    <div class="reload-note">// acesse novamente para uma mensagem diferente</div>
+  </main>
+
+  <script src="js/scripts/main.js"></script>
+</body>
+</html>

@@ -9,48 +9,55 @@ async function loadData(){
 
 function render(){
   const m=DATA.meta||{};
-  setText('d-siteTitle',m.siteTitle||'bydan');
-  setText('d-siteSub',m.siteSub||'');
-  setText('d-siteSym',m.siteSym||'✦');
-  setText('d-marquee',m.marquee||'');
-  setText('d-footerSym',m.footerSym||'✦');
-  setText('d-footerInfo',m.footerInfo||'');
-  document.getElementById('wander').textContent=m.wanderText||'';
-  document.title=(m.siteTitle||'bydan')+' — arquivo pessoal';
-  setMeta('og:title',(m.siteTitle||'bydan')+' — arquivo pessoal');
-  setMeta('og:description',m.siteSub||'');
-  document.getElementById('d-badges').innerHTML=(m.badges||[]).map(b=>'<span class="px-badge">'+esc(b)+'</span>').join('');
+  const siteTitle=(m.siteTitle||'bydan')+' — arquivo pessoal';
+  const siteDesc=m.siteSub||'Arquivo pessoal de bydan: projetos, blog, stack e contato.';
+  setText('site-title',m.siteTitle||'bydan');
+  setText('site-sub',m.siteSub||'');
+  setText('site-sym',m.siteSym||'✦');
+  setText('marquee',m.marquee||'');
+  setText('footer-sym',m.footerSym||'✦');
+  setText('footer-info',m.footerInfo||'');
+  document.title=siteTitle;
+  setMeta('og:title',siteTitle);
+  setMeta('og:description',siteDesc);
+  setMetaName('description',siteDesc);
+  setMetaName('twitter:title',siteTitle);
+  setMetaName('twitter:description',siteDesc);
+  document.getElementById('site-badges').innerHTML=(m.badges||[]).map(b=>'<span class="px-badge">'+esc(b)+'</span>').join('');
   if(!twDone)startTypewriter(m.typewriterMsg||'');
-  document.getElementById('d-novidades').innerHTML=(DATA.novidades||[]).map(n=>'<div class="i-box"><div class="i-box-title">'+esc(n.title)+'</div>'+(n.lines||[]).map(l=>'<p>'+esc(l)+'</p>').join('')+'</div>').join('');
+  document.getElementById('novidades').innerHTML=(DATA.novidades||[]).map(n=>'<div class="i-box"><div class="i-box-title">'+esc(n.title)+'</div>'+(n.lines||[]).map(l=>'<p>'+esc(l)+'</p>').join('')+'</div>').join('');
   const pub=(DATA.posts||[]).filter(p=>p.status==='published');
-  document.getElementById('d-recent-posts').innerHTML=pub.slice(0,2).map(renderPostCard).join('')||'<div class="empty-state">// nenhuma transmissão ainda</div>';
+  document.getElementById('recent-posts').innerHTML=pub.slice(0,2).map(renderPostCard).join('')||'<div class="empty-state">// nenhuma transmissão ainda</div>';
   renderBlog();
   renderProjetos();
   const s=DATA.sobre||{};
   const av=s.avatar||'D';
-  const avBox=document.getElementById('d-avatar');
+  const avBox=document.getElementById('avatar');
   if(avBox){
     if(av.startsWith('http')||av.startsWith('data:')){
-      avBox.innerHTML='<img src="'+esc(av)+'" alt="avatar" style="width:100%;height:100%;object-fit:cover;display:block;">';
+      avBox.innerHTML='<img class="avatar-img" src="'+esc(av)+'" alt="avatar">';
       avBox.style.padding='0';avBox.style.overflow='hidden';
     }else{avBox.textContent=av;avBox.style.padding='';}
   }
-  document.getElementById('d-sobre-text').innerHTML=(s.paragraphs||[]).map(p=>'<p>'+esc(p)+'</p>').join('')+(s.handnote?'<span class="handnote">'+esc(s.handnote)+'</span>':'');
+  document.getElementById('sobre-text').innerHTML=(s.paragraphs||[]).map(p=>'<p>'+esc(p)+'</p>').join('')+(s.handnote?'<span class="handnote">'+esc(s.handnote)+'</span>':'');
   const f=DATA.filosofia||{};
-  setText('d-filo-quote',f.quote||'');
-  document.getElementById('d-filo-paras').innerHTML=(f.paragraphs||[]).map(p=>'<p>'+esc(p)+'</p>').join('');
-  document.getElementById('d-stack').innerHTML=(DATA.stack||[]).map(s=>'<div class="st-row"><span class="st-name">'+esc(s.name)+'</span><div class="st-bar"><div class="st-fill" style="width:0%" data-pct="'+s.pct+'"></div></div><span class="st-level">'+esc(s.level)+'</span></div>').join('');
+  setText('filo-quote',f.quote||'');
+  document.getElementById('filo-paras').innerHTML=(f.paragraphs||[]).map(p=>'<p>'+esc(p)+'</p>').join('');
+  document.getElementById('stack-table').innerHTML=(DATA.stack||[]).map(s=>'<div class="st-row"><span class="st-name">'+esc(s.name)+'</span><div class="st-bar"><div class="st-fill" data-pct="'+s.pct+'"></div></div><span class="st-level">'+esc(s.level)+'</span></div>').join('');
   setTimeout(()=>document.querySelectorAll('.st-fill').forEach(el=>el.style.width=el.dataset.pct+'%'),100);
   const c=DATA.contato||{};
-  setText('d-contato-note',c.note||'');
-  document.getElementById('d-contato-links').innerHTML=(c.links||[]).map(l=>'<div class="c-row"><span class="c-key">'+esc(l.key)+'</span><a class="c-val" href="'+esc(l.href)+'" target="_blank" rel="noopener">'+esc(l.val)+'</a></div>').join('');
+  setText('contato-note',c.note||'');
+  document.getElementById('contato-links').innerHTML=(c.links||[]).map(l=>'<div class="c-row"><span class="c-key">'+esc(l.key)+'</span><a class="c-val" href="'+esc(l.href)+'" target="_blank" rel="noopener">'+esc(l.val)+'</a></div>').join('');
 }
 
 function renderBlog(){
   const posts=(DATA.posts||[]).filter(p=>p.status==='published');
   const tags=[...new Set(posts.flatMap(p=>p.tags||[]))];
   const el=document.getElementById('blog-tag-filter');
-  el.innerHTML=tags.length?['<button class="tag-filter-btn on" onclick="filterTag(null,\'blog\',this)">todos</button>',...tags.map(t=>'<button class="tag-filter-btn" onclick="filterTag(\''+esc(t)+'\',\'blog\',this)">'+esc(t)+'</button>')].join(''):'';
+  el.innerHTML=tags.length?[
+    '<button class="tag-filter-btn on" type="button" data-filter-tag="" data-ns="blog">todos</button>',
+    ...tags.map(t=>'<button class="tag-filter-btn" type="button" data-filter-tag="'+escAttr(t)+'" data-ns="blog">'+esc(t)+'</button>')
+  ].join(''):'';
   renderBlogPosts(posts);
 }
 
@@ -61,25 +68,28 @@ function renderBlogPosts(posts){
   const cnt=document.getElementById('search-results-count');
   if(searchQuery||activeTag){cnt.style.display='block';cnt.textContent='// '+f.length+' resultado'+(f.length!==1?'s':'')+' encontrado'+(f.length!==1?'s':'');}
   else cnt.style.display='none';
-  document.getElementById('d-blog-posts').innerHTML=f.length?f.map(renderPostCard).join(''):'<div class="empty-state">// nenhum resultado encontrado</div>';
+  document.getElementById('blog-posts').innerHTML=f.length?f.map(renderPostCard).join(''):'<div class="empty-state">// nenhum resultado encontrado</div>';
 }
 
 function renderProjetos(){
   const projs=(DATA.projetos||[]).filter(p=>p.status==='published');
   const tags=[...new Set(projs.flatMap(p=>p.tags||[]))];
   const el=document.getElementById('proj-tag-filter');
-  el.innerHTML=tags.length?['<button class="tag-filter-btn on" onclick="filterTag(null,\'proj\',this)">todos</button>',...tags.map(t=>'<button class="tag-filter-btn" onclick="filterTag(\''+esc(t)+'\',\'proj\',this)">'+esc(t)+'</button>')].join(''):'';
+  el.innerHTML=tags.length?[
+    '<button class="tag-filter-btn on" type="button" data-filter-tag="" data-ns="proj">todos</button>',
+    ...tags.map(t=>'<button class="tag-filter-btn" type="button" data-filter-tag="'+escAttr(t)+'" data-ns="proj">'+esc(t)+'</button>')
+  ].join(''):'';
   renderProjCards(projs);
 }
 
 function renderProjCards(projs){
   let f=projs;
   if(activeProjTag)f=f.filter(p=>(p.tags||[]).includes(activeProjTag));
-  document.getElementById('d-proj-grid').innerHTML=f.length?f.map(p=>{
+  document.getElementById('proj-grid').innerHTML=f.length?f.map(p=>{
     const thumb=p.coverImage?'<img src="'+esc(p.coverImage)+'" alt="'+esc(p.title)+'">'  :'[ capa ]';
-    const tags=(p.tags||[]).map(t=>'<span class="proj-tag" onclick="filterTag(\''+esc(t)+'\',\'proj\',null)">'+esc(t)+'</span>').join('');
+    const tags=(p.tags||[]).map(t=>'<span class="proj-tag" role="button" tabindex="0" data-filter-tag="'+escAttr(t)+'" data-ns="proj">'+esc(t)+'</span>').join('');
     return '<div class="proj-card"><div class="proj-thumb">'+thumb+'</div><div class="proj-body"><div class="proj-title">'+esc(p.title)+'</div><div class="proj-desc">'+esc(p.desc)+'</div><div class="proj-tags">'+tags+'</div>'+renderProjLinks(p)+'</div></div>';
-  }).join(''):'<div class="empty-state" style="grid-column:1/-1">// nenhum projeto encontrado</div>';
+  }).join(''):'<div class="empty-state empty-state--span-grid">// nenhum projeto encontrado</div>';
 }
 
 function filterTag(tag,ns,btn){
@@ -102,9 +112,9 @@ function clearSearch(){
 
 function renderPostCard(p){
   const rt=readTime(p.content||'');
-  const tags=p.tags&&p.tags.length?'<div class="post-tags">'+p.tags.map(t=>'<span class="post-tag" onclick="filterTag(\''+esc(t)+'\',\'blog\',null);go(\'blog\');">'+esc(t)+'</span>').join('')+'</div>':'';
+  const tags=p.tags&&p.tags.length?'<div class="post-tags">'+p.tags.map(t=>'<span class="post-tag" role="button" tabindex="0" data-filter-tag="'+escAttr(t)+'" data-ns="blog" data-go="blog">'+esc(t)+'</span>').join('')+'</div>':'';
   const cover=p.coverImage?'<img class="post-cover" src="'+esc(p.coverImage)+'" alt="'+esc(p.coverAlt||p.title)+'" loading="lazy">':'';
-  return '<div class="post"><div class="post-date">'+esc(p.date)+'<span class="read-time">~'+rt+' min de leitura</span></div><div class="post-title">'+esc(p.title)+'</div><div class="post-excerpt">'+esc(p.excerpt)+'</div>'+tags+'<div style="margin-top:10px;"><a class="read-more" onclick="openPost(\''+p.id+'\');return false;" href="#">[ seguir lendo &rarr; ]</a></div>'+cover+'</div>';
+  return '<div class="post"><div class="post-date">'+esc(p.date)+'<span class="read-time">~'+rt+' min de leitura</span></div><div class="post-title">'+esc(p.title)+'</div><div class="post-excerpt">'+esc(p.excerpt)+'</div>'+tags+'<div class="post-readmore"><a class="read-more" data-open-post="'+escAttr(p.id)+'" href="#">[ seguir lendo &rarr; ]</a></div>'+cover+'</div>';
 }
 
 function renderProjLinks(p){
@@ -128,13 +138,13 @@ function openPost(id){
   document.querySelectorAll('.nlink').forEach(b=>b.classList.remove('on'));
   const rt=readTime(post.content||'');
   const attach=post.attachments&&post.attachments.length?'<div class="post-attachments"><div class="attach-title">// anexos</div>'+post.attachments.map(a=>'<div class="attach-item"><span class="attach-type">'+esc(a.type)+'</span><a href="'+esc(a.url)+'" target="_blank">'+esc(a.name)+'</a></div>').join('')+'</div>':'';
-  const tags=post.tags&&post.tags.length?'<div class="post-tags" style="margin-bottom:16px;">'+post.tags.map(t=>'<span class="post-tag">'+esc(t)+'</span>').join('')+'</div>':'';
-  const cover=post.coverImage?'<img src="'+esc(post.coverImage)+'" alt="'+esc(post.coverAlt||post.title)+'" style="width:100%;max-height:280px;object-fit:cover;border:1px solid var(--lavender);margin-bottom:16px;" loading="lazy">':'';
-  document.getElementById('post-view-content').innerHTML='<div style="font-family:var(--vt);font-size:0.8rem;color:var(--dim);letter-spacing:0.15em;margin-bottom:4px;display:flex;gap:12px;"><span>'+esc(post.date)+'</span><span>~'+rt+' min de leitura</span></div><div style="font-family:var(--hand);font-size:2.2rem;color:var(--text);line-height:1.2;margin-bottom:12px;">'+esc(post.title)+'</div>'+tags+cover+(post.content||'')+attach;
+  const tags=post.tags&&post.tags.length?'<div class="post-tags post-tags--spaced">'+post.tags.map(t=>'<span class="post-tag" role="button" tabindex="0" data-filter-tag="'+escAttr(t)+'" data-ns="blog" data-go="blog">'+esc(t)+'</span>').join('')+'</div>':'';
+  const cover=post.coverImage?'<img class="post-view-cover" src="'+esc(post.coverImage)+'" alt="'+esc(post.coverAlt||post.title)+'" loading="lazy">':'';
+  document.getElementById('post-view-content').innerHTML='<div class="post-view-meta"><span>'+esc(post.date)+'</span><span>~'+rt+' min de leitura</span></div><div class="post-view-title">'+esc(post.title)+'</div>'+tags+cover+(post.content||'')+attach;
   const idx=posts.indexOf(post);
   const prev=posts[idx+1];
   const next=posts[idx-1];
-  document.getElementById('post-nav').innerHTML=(prev?'<a onclick="openPost(\''+prev.id+'\');return false;" href="#">[ &larr; '+esc(prev.title.slice(0,30))+(prev.title.length>30?'…':'')+' ]</a>':'<span></span>')+(next?'<a onclick="openPost(\''+next.id+'\');return false;" href="#" style="text-align:right;">[ '+esc(next.title.slice(0,30))+(next.title.length>30?'…':'')+' &rarr; ]</a>':'<span></span>');
+  document.getElementById('post-nav').innerHTML=(prev?'<a data-open-post="'+escAttr(prev.id)+'" href="#">[ &larr; '+esc(prev.title.slice(0,30))+(prev.title.length>30?'…':'')+' ]</a>':'<span></span>')+(next?'<a data-open-post="'+escAttr(next.id)+'" href="#" class="post-nav-next">[ '+esc(next.title.slice(0,30))+(next.title.length>30?'…':'')+' &rarr; ]</a>':'<span></span>');
   document.querySelector('[data-t="blog"]').classList.add('on');
   const pv=document.getElementById('post-view');
   pv.style.display='block';pv.classList.add('on');
@@ -173,11 +183,6 @@ document.querySelectorAll('.nlink').forEach(b=>b.addEventListener('click',()=>go
 const backTop=document.getElementById('back-top');
 window.addEventListener('scroll',()=>backTop.classList.toggle('show',window.scrollY>400),{passive:true});
 
-const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-let mx=300,my=300;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function t(){ring.style.left=mx+'px';ring.style.top=my+'px';requestAnimationFrame(t);})();
-
 function startTypewriter(msg){
   twDone=true;
   const tw=document.getElementById('tw-text');
@@ -188,15 +193,6 @@ function startTypewriter(msg){
   }
   setTimeout(type,600);
 }
-
-const wnd=document.getElementById('wander');
-let wx=-500,wy=Math.random()*window.innerHeight*0.7+80;
-(function mw(){
-  wx+=0.28;
-  if(wx>window.innerWidth+600){wx=-600;wy=Math.random()*window.innerHeight*0.7+80;}
-  wnd.style.left=wx+'px';wnd.style.top=wy+'px';
-  requestAnimationFrame(mw);
-})();
 
 const dbtn=document.getElementById('dbtn');
 let dark=localStorage.getItem('bydan_dark')==='1';
@@ -272,7 +268,9 @@ abtn.addEventListener('click',()=>{
 
 function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
 function setMeta(prop,val){const el=document.querySelector('meta[property="'+prop+'"]');if(el)el.setAttribute('content',val);}
+function setMetaName(name,val){const el=document.querySelector('meta[name="'+name+'"]');if(el)el.setAttribute('content',val);}
 function esc(str){if(!str)return '';return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(str){return esc(str).replace(/'/g,'&#39;');}
 
 window.addEventListener('storage',e=>{
   if(e.key==='bydan_content'){try{DATA=JSON.parse(e.newValue);render();}catch(err){}}
